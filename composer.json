@@ -1,6 +1,12 @@
 {
+    "authors": [
+        {
+            "name": "Adrien Chinour",
+            "email": "github@chinour.fr"
+        }
+    ],
     "type": "project",
-    "license": "proprietary",
+    "license": "MIT",
     "require": {
         "php": "^7.1.3",
         "ext-ctype": "*",
@@ -28,6 +34,7 @@
         "symfony/twig-bundle": "5.0.*",
         "symfony/validator": "5.0.*",
         "symfony/web-link": "5.0.*",
+        "symfony/webpack-encore-bundle": "^1.7",
         "symfony/yaml": "5.0.*"
     },
     "require-dev": {
