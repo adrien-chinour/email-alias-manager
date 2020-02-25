@@ -54,12 +54,15 @@ final class EmailController extends AbstractController
     public function new(Request $request): Response
     {
         $email = new Email();
-        $email->setAlias(uniqid() . "@chinour.fr");
 
         $form = $this->createForm(EmailType::class, $email);
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {
+
+            // update alias because domain not include in form
+            $email->setAlias($email->getAlias() . $email->getDomain());
+
             $this->repository->save($email);
             $this->api->addAlias($email->getTarget(), $email->getAlias());
 

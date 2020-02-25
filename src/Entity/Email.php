@@ -73,8 +73,18 @@ class Email
         return $this;
     }
 
-    public function __toString()
+    public function __toString(): string
     {
         return $this->getAlias();
+    }
+
+    public function getDomain(): string
+    {
+        $email = explode('@', $this->getTarget());
+        if (count($email) < 2) {
+            return "";
+        }
+
+        return "@$email[1]";
     }
 }

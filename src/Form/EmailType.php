@@ -4,9 +4,9 @@ namespace App\Form;
 
 use App\Entity\Email;
 use App\Service\AliasApiInterface;
-use Symfony\Component\Form\Extension\Core\Type\EmailType as ExtensionEmailType;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\Extension\Core\Type\ChoiceType;
+use Symfony\Component\Form\Extension\Core\Type\TextType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolver;
 use Symfony\Contracts\Translation\TranslatorInterface;
@@ -35,7 +35,7 @@ final class EmailType extends AbstractType
                         return $value;
                     },
                 ])
-                ->add('alias', ExtensionEmailType::class, [
+                ->add('alias', TextType::class, [
                     'label' => $this->translator->trans("Alias"),
                 ]);
         }
