@@ -2,7 +2,7 @@
 
 {% block stylesheets %}
     {{ parent() }}
-    <link href="https://cdn.jsdelivr.net/npm/select2@4.0.11/dist/css/select2.min.css" rel="stylesheet"/>
+    {{ encore_entry_link_tags('edit-alias') }}
 {% endblock %}
 
 {% block content_title %}Modifier un alias{% endblock %}
@@ -10,7 +10,10 @@
 {% block content_body %}
     <a href="{{ path('email_index') }}">Revenir en arrière</a>
     {{ form_start(form) }}
-    {{ form_row(form.tags) }}
+    <div id="select-tags-input" class="form-group" data-tags="{{ email.tags | json_encode }}">
+        {{ form_label(form.tags) }}
+        {{ form_widget(form.tags) }}
+    </div>
     <button class="btn btn-block btn-primary">Modifier</button>
     {{ form_end(form) }}
     <div class="mb-3"></div>
@@ -19,18 +22,5 @@
 
 {% block javascripts %}
     {{ parent() }}
-    <script src="https://cdn.jsdelivr.net/npm/select2@4.0.11/dist/js/select2.min.js"></script>
-    <script>
-        $(document).ready(function () {
-            $('.select2').select2({
-                allowClear: true,
-                tags: true
-            });
-        });
-        let option;
-        {% for site in email.tags %}
-        option = new Option("{{ site }}", "{{ site }}", true, true);
-        $('.select2').append(option).trigger('change');
-        {% endfor %}
-    </script>
+    {{ encore_entry_script_tags('edit-alias') }}
 {% endblock %}

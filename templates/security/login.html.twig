@@ -3,7 +3,7 @@
 {% block title %}{{ parent() }} - {{ 'Connexion' | trans }}{% endblock %}
 
 {% block stylesheets %}
-    <link rel="stylesheet" href="{{ asset('styles/login.css') }}">
+    {{ encore_entry_link_tags('login') }}
 {% endblock %}
 
 {% block body %}
@@ -23,4 +23,8 @@
                value="{{ csrf_token('authenticate') }}">
         <button class="btn btn-lg btn-primary btn-block" type="submit">{{ 'Connexion' | trans }}</button>
     </form>
+{% endblock %}
+
+{% block javascripts %}
+    {{ encore_entry_script_tags('login') }}
 {% endblock %}

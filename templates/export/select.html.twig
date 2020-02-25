@@ -1,5 +1,10 @@
 {% extends 'dashboard.html.twig' %}
 
+{% block stylesheets %}
+    {{ parent() }}
+    {{ encore_entry_link_tags('export-selection') }}
+{% endblock %}
+
 {% block content_title %}{{ "Export data" | trans }}{% endblock %}
 
 {% block content_body %}
@@ -40,5 +45,6 @@
 {% endblock %}
 
 {% block javascripts %}
-    <script src="{{ asset('javascripts/export-selection.js') }}"></script>
+    {{ parent() }}
+    {{ encore_entry_script_tags('export-selection') }}
 {% endblock %}

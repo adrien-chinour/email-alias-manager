@@ -51,8 +51,7 @@ class OvhAliasApi implements AliasApiInterface
      */
     public function addAlias(string $email, string $alias): void
     {
-        $this->api->post("{$this->baseUrl}/account/$email/alias",
-            ['alias' => $alias]);
+        $this->api->post("{$this->baseUrl}/account/$email/alias", ['alias' => $alias]);
     }
 
     /**
@@ -61,7 +60,6 @@ class OvhAliasApi implements AliasApiInterface
      */
     public function deleteAlias(string $email, string $alias): void
     {
-        $this->api->delete("{$this->baseUrl}/account/$email/alias/$alias",
-            ['alias' => $alias]);
+            $this->api->delete("{$this->baseUrl}/account/$email/alias/$alias", ['alias' => $alias]);
     }
 }
