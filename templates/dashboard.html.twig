@@ -1,0 +1,14 @@
+{% extends 'base.html.twig' %}
+
+{% block stylesheets %}
+    <link rel="stylesheet" href="{{ asset('styles/dashboard.css') }}">
+{% endblock %}
+
+{% block body %}
+    {% include '_components/navbar.html.twig' %}
+
+    <main class="container">
+        <h1 id="content_title" class="text-center">{% block content_title %}{% endblock %}</h1>
+        <section id="content_body">{% block content_body %}{% endblock %}</section>
+    </main>
+{% endblock %}

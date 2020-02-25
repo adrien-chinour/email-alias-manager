@@ -1,0 +1,35 @@
+Connexion: Connexion
+Username: Username
+Password: Password
+'Sign in': 'Sign in'
+'Export data': 'Export data'
+'Import data': 'Import data'
+Email: Email
+Alias: Alias
+'Export aliases': 'Export aliases'
+'Export tags': 'Export tags'
+Export: Export
+'Add new alias': 'Add new alias'
+Target: Target
+Tags: Tags
+Actions: Actions
+edit: edit
+'0 alias found': '0 alias found'
+'Edit alias': 'Edit alias'
+Cancel: Cancel
+Edit: Edit
+'Are you sure ?': 'Are you sure ?'
+Delete: Delete
+'Result(s) for': 'Result(s) for'
+'No result found': 'No result found'
+see: see
+'My aliases': 'My aliases'
+Synchronisation: Synchronisation
+'Exporting aliases': 'Exporting aliases'
+'Search alias': 'Search alias'
+Search: Search
+'Alias to sync': 'Alias to sync'
+'Existing on': 'Existing on'
+'Sync all': 'Sync all'
+Manage aliases: 'Manage my aliases'
+site.title: 'Alias manager'

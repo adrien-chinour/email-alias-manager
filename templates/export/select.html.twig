@@ -1,0 +1,44 @@
+{% extends 'dashboard.html.twig' %}
+
+{% block content_title %}{{ "Export data" | trans }}{% endblock %}
+
+{% block content_body %}
+    <button class="float-right btn btn-primary mb-2">{{ "Import data" | trans }}</button>
+    <form action="{{ path('export_csv') }}" method="post">
+        <table class="table table-striped">
+            <thead>
+            <tr>
+                <th>{{ "Email" | trans }}</th>
+                <th>{{ "Alias" | trans }}</th>
+                <th>
+                    <input type="checkbox" name="all-alias" id="select-all-alias" checked>
+                    {{ "Export aliases" | trans }}
+                </th>
+                <th>
+                    <input type="checkbox" name="all-tags" id="select-all-tags" checked>
+                    {{ "Export tags" | trans }}
+                </th>
+            </tr>
+            </thead>
+            <tbody>
+            {% for alias in aliases %}
+                <tr>
+                    <td>{{ alias.target }}</td>
+                    <td>{{ alias.alias }}</td>
+                    <td>
+                        <input type="checkbox" class="checkbox-alias" name="alias[{{ alias.id }}]" checked>
+                    </td>
+                    <td>
+                        <input type="checkbox" class="checkbox-tags" name="tags[{{ alias.id }}]" checked>
+                    </td>
+                </tr>
+            {% endfor %}
+            </tbody>
+        </table>
+        <button type="submit" class="btn btn-block btn-success">{{ "Export" | trans }}</button>
+    </form>
+{% endblock %}
+
+{% block javascripts %}
+    <script src="{{ asset('javascripts/export-selection.js') }}"></script>
+{% endblock %}

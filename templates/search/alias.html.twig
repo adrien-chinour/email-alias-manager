@@ -1,0 +1,20 @@
+{% extends 'dashboard.html.twig' %}
+
+{% block content_title %}{{ "Result(s) for" | trans }} "{{ search }}"{% endblock %}
+
+{% block content_body %}
+    <ul class="list-group list-group-flush">
+        {% if results is empty %}
+            <p>{{ "No result found" | trans }}</p>
+        {% endif %}
+        {% for result in results %}
+            <li class="list-group-item">
+                {{ result.alias }} <small>(pour {{ result.target }})</small>
+                <a class="badge badge-primary badge-pill float-right"
+                   href="{{ path('email_edit', {id: result.id}) }}">
+                    <i class="fas fa-eye"></i> {{ "see" | trans }}
+                </a>
+            </li>
+        {% endfor %}
+    </ul>
+{% endblock %}

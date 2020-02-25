@@ -1,0 +1,40 @@
+{% extends 'dashboard.html.twig' %}
+
+{% block title %}Gestion de mes alias{% endblock %}
+
+{% block content_title %}Mes alias{% endblock %}
+{% block content_body %}
+    <a class="btn btn-block btn-success" href="{{ path('email_new') }}">Ajouter un alias</a>
+    <table class="table">
+        <thead>
+        <tr>
+            <th>Target</th>
+            <th>Alias</th>
+            <th>Tags</th>
+            <th>actions</th>
+        </tr>
+        </thead>
+        <tbody>
+        {% for email in emails %}
+            <tr>
+                <td>{{ email.target }}</td>
+                <td>{{ email.alias }}</td>
+                <td>
+                    {% for tag in email.tags %}
+                        <span class="badge badge-pill badge-secondary">{{ site }}</span>
+                    {% endfor %}
+                </td>
+                <td>
+                    <a class="btn btn-sm btn-primary" href="{{ path('email_edit', {'id': email.id}) }}">
+                        modifier
+                    </a>
+                </td>
+            </tr>
+        {% else %}
+            <tr>
+                <td colspan="5">Aucun email trouvé... :(</td>
+            </tr>
+        {% endfor %}
+        </tbody>
+    </table>
+{% endblock %}

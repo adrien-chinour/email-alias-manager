@@ -1,0 +1,34 @@
+Connexion: Connexion
+Username: Identifiant
+Password: 'Mot de passe'
+'Export data': 'Exporter les données'
+'Import data': 'Importer les données'
+Email: Email
+Alias: Alias
+'Export aliases': 'Exporter les alias'
+'Export tags': 'Exporter les tags'
+Export: Export
+'Add new alias': 'Ajouter un alias'
+Target: Email
+Tags: Tags
+Actions: Actions
+edit: modifier
+'0 alias found': 'Aucun alias trouvée'
+'Edit alias': "Modifier l'alias"
+Cancel: Annuler
+Edit: Modifier
+'Are you sure ?': 'Es-tu sûr ?'
+Delete: Supprimer
+'Result(s) for': 'Résultat(s) pour'
+'No result found': 'Aucun résultat trouvé'
+see: voir
+'My aliases': 'Mes alias'
+Synchronisation: Synchronisation
+'Exporting aliases': 'Exporter les alias'
+'Search alias': 'Rechercher un alias'
+Search: Rechercher
+'Alias to sync': 'Alias à synchroniser'
+'Existing on': 'Existe sur'
+'Sync all': 'Tout synchroniser'
+Manage aliases: 'Gestion de mes alias'
+site.title: "Gestionnaire d'Alias"
