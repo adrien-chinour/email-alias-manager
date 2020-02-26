@@ -1,4 +1,6 @@
-![logo ellias](https://user-images.githubusercontent.com/24455386/75344693-6ff93680-589b-11ea-93bd-25ffebf62d74.png)
+<div style="text-align:center">
+    <img src="https://user-images.githubusercontent.com/24455386/75344693-6ff93680-589b-11ea-93bd-25ffebf62d74.png"/>
+</div>
 
 # Ellias : Email Alias Manager
 
