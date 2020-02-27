@@ -59,7 +59,6 @@ final class EmailController extends AbstractController
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {
-
             // update alias because domain not include in form
             $email->setAlias($email->getAlias() . $email->getDomain());
 
@@ -107,8 +106,10 @@ final class EmailController extends AbstractController
      */
     public function delete(Request $request, Email $email): Response
     {
-        if ($this->isCsrfTokenValid('delete' . $email->getId(),
-            $request->request->get('_token'))) {
+        if ($this->isCsrfTokenValid(
+            'delete' . $email->getId(),
+            $request->request->get('_token')
+        )) {
             $this->api->deleteAlias($email->getTarget(), $email->getAlias());
             $this->repository->delete($email);
         }

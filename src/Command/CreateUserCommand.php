@@ -54,5 +54,4 @@ final class CreateUserCommand extends Command
 
         return 0;
     }
-
 }

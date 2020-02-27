@@ -88,5 +88,4 @@ final class SyncController extends AbstractController
             ['message' => 'Synchronisation terminée', 'level' => 'success']
         );
     }
-
 }

@@ -27,5 +27,4 @@ final class IndexController extends AbstractController
     {
         return new Response(null, 200);
     }
-
 }

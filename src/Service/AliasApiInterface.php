@@ -32,5 +32,4 @@ interface AliasApiInterface
      * @return bool
      */
     public function deleteAlias(string $email, string $alias): bool;
-
 }

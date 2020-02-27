@@ -20,6 +20,4 @@ class UserRepository extends AbstractEntityRepository
     {
         parent::__construct($registry, User::class);
     }
-
-
 }
