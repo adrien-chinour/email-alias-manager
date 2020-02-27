@@ -3,6 +3,8 @@
 namespace App\Provider\Ovh;
 
 use App\Service\AliasApiInterface;
+use GuzzleHttp\Exception\ClientException;
+use InvalidArgumentException;
 use Ovh\Api;
 
 class OvhAliasApi implements AliasApiInterface
@@ -22,7 +24,7 @@ class OvhAliasApi implements AliasApiInterface
         // check environment variables is defined
         foreach (['OVH_KEY', 'OVH_SECRET', 'OVH_CONSUMER', 'OVH_ENDPOINT', 'OVH_SERVICE'] as $key) {
             if (!isset($_ENV[$key]) || is_null($_ENV[$key])) {
-                throw new \InvalidArgumentException("Environment variable $key must be defined to inject this service.");
+                throw new InvalidArgumentException("Environment variable $key must be defined to inject this service.");
             }
         }
 
@@ -48,18 +50,34 @@ class OvhAliasApi implements AliasApiInterface
     /**
      * @param $email
      * @param $alias
+     *
+     * @return bool
      */
-    public function addAlias(string $email, string $alias): void
+    public function addAlias(string $email, string $alias): bool
     {
-        $this->api->post("{$this->baseUrl}/account/$email/alias", ['alias' => $alias]);
+        try {
+            $this->api->post("{$this->baseUrl}/account/$email/alias", ['alias' => $alias]);
+        } catch (ClientException $exception) {
+            // TODO log this error
+            return false;
+        }
+        return true;
     }
 
     /**
      * @param $email
      * @param $alias
+     *
+     * @return bool
      */
-    public function deleteAlias(string $email, string $alias): void
+    public function deleteAlias(string $email, string $alias): bool
     {
+        try {
             $this->api->delete("{$this->baseUrl}/account/$email/alias/$alias", ['alias' => $alias]);
+        } catch (ClientException $exception) {
+            // TODO log this error
+            return false;
+        }
+        return true;
     }
 }

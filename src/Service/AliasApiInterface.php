@@ -5,12 +5,32 @@ namespace App\Service;
 interface AliasApiInterface
 {
 
+    /**
+     * @return array
+     */
     public function getEmails(): array;
 
+    /**
+     * @param string $email
+     *
+     * @return array
+     */
     public function getAlias(string $email): array;
 
-    public function addAlias(string $email, string $alias): void;
+    /**
+     * @param string $email
+     * @param string $alias
+     *
+     * @return bool
+     */
+    public function addAlias(string $email, string $alias): bool;
 
-    public function deleteAlias(string $email, string $alias): void;
+    /**
+     * @param string $email
+     * @param string $alias
+     *
+     * @return bool
+     */
+    public function deleteAlias(string $email, string $alias): bool;
 
 }
