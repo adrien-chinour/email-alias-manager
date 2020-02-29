@@ -37,5 +37,4 @@ class EmailRepository extends AbstractEntityRepository
 
         return $result ?? [];
     }
-
 }

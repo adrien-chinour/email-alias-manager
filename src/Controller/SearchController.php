@@ -29,5 +29,4 @@ final class SearchController extends AbstractController
             ['results' => $repository->search($search), 'search' => $search]
         );
     }
-
 }

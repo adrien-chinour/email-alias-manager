@@ -3,7 +3,6 @@
 
 namespace App\Service;
 
-
 use App\Repository\EmailRepository;
 use Symfony\Component\HttpKernel\Exception\HttpException;
 use ZipArchive;
@@ -102,5 +101,4 @@ final class EmailAliasExporter
         fclose($file);
         return $filename;
     }
-
 }

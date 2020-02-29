@@ -38,6 +38,4 @@ abstract class AbstractEntityRepository extends ServiceEntityRepository
             return;
         }
     }
-
-
 }
