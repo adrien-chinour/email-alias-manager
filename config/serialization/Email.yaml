@@ -1,0 +1,4 @@
+App\Entity\Email:
+    attributes:
+        tags:
+            groups: ['update']

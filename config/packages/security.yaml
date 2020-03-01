@@ -20,6 +20,9 @@ security:
             logout:
                 path: app_logout
 
+    # first match is always be used
     access_control:
+        - { path: ^/health-check, roles: IS_AUTHENTICATED_ANONYMOUSLY }
         - { path: ^/login, roles: IS_AUTHENTICATED_ANONYMOUSLY }
+        - { path: ^/api, roles: IS_AUTHENTICATED_ANONYMOUSLY }
         - { path: ^/, roles: ROLE_ADMIN }

@@ -28,3 +28,7 @@ services:
 
     # add more service definitions when explicit configuration is needed
     # please note that last definitions always *replace* previous ones
+
+    # even with service autowiring and autoconfiguration enabled, you must still configure the decoration
+    App\DataPersister\EmailDataPersister:
+        decorates: 'api_platform.doctrine.orm.data_persister'
