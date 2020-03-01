@@ -1,1 +1,4 @@
 # routing is made with annotations
+authentication_token:
+    path: /authentication_token
+    methods: ['POST']
