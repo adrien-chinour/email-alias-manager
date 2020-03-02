@@ -1,0 +1,24 @@
+resources:
+    App\Entity\Email:
+        collectionOperations:
+            get: ~
+            post: ~
+        itemOperations:
+            get: ~
+            delete: ~
+            patch:
+                denormalization_context:
+                    groups: ['update']
+            put:
+                denormalization_context:
+                    groups: ['update']
+
+    App\Dto\Target:
+        collectionOperations:
+            get:
+                method: GET
+                path: /target
+                controller: App\Controller\TargetEmailApiController
+                openapi_context:
+                    summary: Get all available emails for aliases
+        itemOperations: []
