@@ -1,4 +1,6 @@
 {
+    "name": "adrien-chinour/ellias",
+    "description": "Create and manage your email aliases.",
     "authors": [
         {
             "name": "Adrien Chinour",

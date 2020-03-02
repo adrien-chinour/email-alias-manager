@@ -8,9 +8,7 @@ jobs:
         steps:
             -   uses: actions/checkout@v2
             -   name: PHP-CS-Fixer
-                uses: OskarStark/php-cs-fixer-ga@2.16.1.2
-                with:
-                    args: --diff --dry-run
+                uses: docker://oskarstark/php-cs-fixer-ga
     build:
         name: Build
         runs-on: ubuntu-latest
