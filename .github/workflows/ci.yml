@@ -2,22 +2,21 @@ name: quality
 on: [push, pull_request]
 
 jobs:
-    php-cs-fixer:
-        name: php-cs-fixer
-        runs-on: ubuntu-latest
-        steps:
-            -   uses: actions/checkout@v2
-            -   name: PHP-CS-Fixer
-                uses: docker://oskarstark/php-cs-fixer-ga
     build:
         name: Build
         runs-on: ubuntu-latest
         steps:
             -   uses: actions/checkout@v2
+
             -   name: Validate composer.json and composer.lock
                 run: composer validate
+
             -   name: Install dependencies
-                run: composer install -q --no-ansi --no-interaction --no-scripts --no-suggest --no-progress --prefer-dist
+                run: composer install --prefer-dist --no-progress --no-suggest
+
+            -   name: Detecting PHP Code Standards Violations
+                run: composer run-script phpcs
+
             -   name: Run test suite
                 run: composer run-script test
                 env:
