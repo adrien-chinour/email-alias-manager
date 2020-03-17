@@ -1,0 +1,23 @@
+name: quality
+on: [push, pull_request]
+
+jobs:
+    build:
+        name: Build
+        runs-on: ubuntu-latest
+        steps:
+            -   uses: actions/checkout@v2
+
+            -   name: Validate composer.json and composer.lock
+                run: composer validate
+
+            -   name: Install dependencies
+                run: composer install --prefer-dist --no-progress --no-suggest
+
+            -   name: Detecting PHP Code Standards Violations
+                run: composer run-script phpcs
+
+            -   name: Run test suite
+                run: composer run-script test
+                env:
+                    APP_ENV: test
