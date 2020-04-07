@@ -10,6 +10,7 @@ use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
+use Symfony\Contracts\Translation\TranslatorInterface;
 
 /**
  * @Route("/email")
@@ -24,13 +25,20 @@ final class EmailController extends AbstractController
     private $repository;
 
     /**
-     * @param \App\Service\AliasApiInterface $api
-     * @param EmailRepository                $repository
+     * @var \Symfony\Contracts\Translation\TranslatorInterface
      */
-    public function __construct(AliasApiInterface $api, EmailRepository $repository)
+    private $translator;
+
+    /**
+     * @param \App\Service\AliasApiInterface                     $api
+     * @param EmailRepository                                    $repository
+     * @param \Symfony\Contracts\Translation\TranslatorInterface $translator
+     */
+    public function __construct(AliasApiInterface $api, EmailRepository $repository, TranslatorInterface $translator)
     {
         $this->api = $api;
         $this->repository = $repository;
+        $this->translator = $translator;
     }
 
     /**
@@ -64,6 +72,7 @@ final class EmailController extends AbstractController
 
             $this->repository->save($email);
             $this->api->addAlias($email->getTarget(), $email->getAlias());
+            $this->addFlash('success', 'Alias ajouté !');
 
             return $this->redirectToRoute('email_index');
         }

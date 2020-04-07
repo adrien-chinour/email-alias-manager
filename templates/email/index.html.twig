@@ -2,39 +2,50 @@
 
 {% block title %}Gestion de mes alias{% endblock %}
 
-{% block content_title %}Mes alias{% endblock %}
+{% block content_title %}
+    <div class="row align-items-center">
+        <div class="col-8 text-white">
+            {{ "My aliases" | trans }}
+        </div>
+        <div class="col-4 text-right">
+            <a href="{{ path('email_new') }}" class="btn btn-sm btn-success">{{ "Add new alias" | trans }}</a>
+        </div>
+    </div>
+{% endblock %}
+
 {% block content_body %}
-    <a class="btn btn-block btn-success" href="{{ path('email_new') }}">Ajouter un alias</a>
-    <table class="table">
-        <thead>
-        <tr>
-            <th>Target</th>
-            <th>Alias</th>
-            <th>Tags</th>
-            <th>actions</th>
-        </tr>
-        </thead>
-        <tbody>
-        {% for email in emails %}
+    <div class="table-responsive mt-3">
+        <table class="table table-hover table-borderless text-center">
+            <thead class="thead-dark">
             <tr>
-                <td>{{ email.target }}</td>
-                <td>{{ email.alias }}</td>
-                <td>
-                    {% for tag in email.tags %}
-                        <span class="badge badge-pill badge-secondary">{{ tag }}</span>
-                    {% endfor %}
-                </td>
-                <td>
-                    <a class="btn btn-sm btn-primary" href="{{ path('email_edit', {'id': email.id}) }}">
-                        modifier
-                    </a>
-                </td>
+                <th>{{ "Target" | trans }}</th>
+                <th>{{ "Alias" | trans }}</th>
+                <th>{{ "Tags" | trans }}</th>
+                <th></th>
             </tr>
-        {% else %}
-            <tr>
-                <td colspan="5">Aucun email trouvé... :(</td>
-            </tr>
-        {% endfor %}
-        </tbody>
-    </table>
+            </thead>
+            <tbody>
+            {% for email in emails %}
+                <tr>
+                    <td>{{ email.target }}</td>
+                    <td>{{ email.alias }}</td>
+                    <td>
+                        {% for tag in email.tags %}
+                            <span class="badge badge-pill badge-info">{{ tag }}</span>
+                        {% endfor %}
+                    </td>
+                    <td class="text-right">
+                        <a class="btn btn-sm btn-secondary" href="{{ path('email_edit', {'id': email.id}) }}">
+                            <i class="fas fa-pen"></i>
+                        </a>
+                    </td>
+                </tr>
+            {% else %}
+                <tr>
+                    <td colspan="5">{{ "0 alias found" | trans }}</td>
+                </tr>
+            {% endfor %}
+            </tbody>
+        </table>
+    </div>
 {% endblock %}

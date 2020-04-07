@@ -52,10 +52,7 @@ final class SyncController extends AbstractController
             }
         }
 
-        return $this->render(
-            'sync/diff.html.twig',
-            ['diff' => $diff]
-        );
+        return $this->render('sync/diff.html.twig', ['diff' => $diff]);
     }
 
     /**
@@ -70,10 +67,8 @@ final class SyncController extends AbstractController
         $emails = $request->request->get('email');
 
         if (empty($aliases)) {
-            return $this->redirectToRoute(
-                'email_index',
-                ['message' => 'Aucune synchronsation à faire', 'level' => 'warning']
-            );
+            $this->addFlash('warning', 'Aucun alias à synchroniser');
+            return $this->redirectToRoute('sync_diff');
         }
 
         foreach ($aliases as $key => $alias) {
@@ -83,9 +78,7 @@ final class SyncController extends AbstractController
             $this->repository->save($email);
         }
 
-        return $this->redirectToRoute(
-            'email_index',
-            ['message' => 'Synchronisation terminée', 'level' => 'success']
-        );
+        $this->addFlash('success', 'Synchronisation terminée');
+        return $this->redirectToRoute('sync_diff');
     }
 }

@@ -56,6 +56,7 @@ final class EmailType extends AbstractType
         $resolver->setDefaults([
             'data_class' => Email::class,
             'edition' => false,
+            'attr' => ['id' => 'email-form']
         ]);
     }
 }

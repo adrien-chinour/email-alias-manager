@@ -8,20 +8,37 @@
 
 {% block body %}
     <form class="form-signin" method="post">
-        <img class="mb-4" src="{{ asset('images/email.svg') }}" alt="" width="72" height="72">
-        <h1 class="h3 mb-3 font-weight-normal">{{ 'Connexion' | trans }}</h1>
-        {% if error %}
-            <div class="alert alert-danger">{{ error.messageKey|trans(error.messageData, 'security') }}</div>
-        {% endif %}
-        <label for="inputUuid" class="sr-only">{{ 'Username' | trans }}</label>
-        <input type="text" value="{{ last_username }}" name="uuid" id="inputUuid" class="form-control"
-               placeholder="{{ 'Username' | trans }}" required autofocus>
-        <label for="inputPassword" class="sr-only">{{ 'Password' | trans }}</label>
-        <input type="password" name="password" id="inputPassword"
-               class="form-control" placeholder="{{ 'Password' | trans }}" required>
-        <input type="hidden" name="_csrf_token"
-               value="{{ csrf_token('authenticate') }}">
-        <button class="btn btn-lg btn-primary btn-block" type="submit">{{ 'Connexion' | trans }}</button>
+        <div class="card">
+            <div class="card-header bg-dark">
+                <h3 class="text-white mb-0 atma">{{ 'site.title' | trans }}</h3>
+            </div>
+            <div class="card-body">
+                {% if error %}
+                    <div class="alert alert-danger">{{ error.messageKey|trans(error.messageData, 'security') }}</div>
+                {% endif %}
+                <div class="input-group mb-3">
+                    <div class="input-group-prepend">
+                        <span class="input-group-text" id="basic-addon1">
+                            <i class="fas fa-user"></i>
+                        </span>
+                    </div>
+                    <input type="text" value="{{ last_username }}" name="uuid" id="inputUuid" class="form-control"
+                           placeholder="{{ 'Username' | trans }}" required autofocus>
+                </div>
+                <div class="input-group mb-3">
+                    <div class="input-group-prepend">
+                        <span class="input-group-text" id="basic-addon1">
+                            <i class="fas fa-key"></i>
+                        </span>
+                    </div>
+                    <input type="password" name="password" id="inputPassword"
+                           class="form-control" placeholder="{{ 'Password' | trans }}" required>
+                </div>
+                <input type="hidden" name="_csrf_token"
+                       value="{{ csrf_token('authenticate') }}">
+                <button class="btn btn-lg btn-dark btn-block" type="submit">{{ 'Connexion' | trans }}</button>
+            </div>
+        </div>
     </form>
 {% endblock %}
 

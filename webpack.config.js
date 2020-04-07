@@ -54,7 +54,7 @@ Encore
     })
 
     // enables Sass/SCSS support
-    //.enableSassLoader()
+    .enableSassLoader()
 
     // uncomment if you use TypeScript
     //.enableTypeScriptLoader()
@@ -74,6 +74,11 @@ Encore
     .addEntry('add-alias', './assets/js/add-alias.js')
     .addEntry('edit-alias', './assets/js/edit-alias.js')
     .addEntry('export-selection', './assets/js/export-selection.js')
+
+    .copyFiles({
+        from: './assets/images',
+    })
+
 ;
 
 module.exports = Encore.getWebpackConfig();

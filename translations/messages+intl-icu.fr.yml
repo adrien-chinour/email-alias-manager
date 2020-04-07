@@ -17,6 +17,7 @@ edit: modifier
 'Edit alias': "Modifier l'alias"
 Cancel: Annuler
 Edit: Modifier
+Save: Sauvegarder
 'Are you sure ?': 'Es-tu sûr ?'
 Delete: Supprimer
 'Result(s) for': 'Résultat(s) pour'
@@ -32,3 +33,5 @@ Search: Rechercher
 'Sync all': 'Tout synchroniser'
 Manage aliases: 'Gestion de mes alias'
 site.title: 'Ellias'
+Delete this alias: 'Supprimer cet alias'
+for: 'pour'

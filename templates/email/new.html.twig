@@ -5,7 +5,7 @@
     {{ encore_entry_link_tags('add-alias') }}
 {% endblock %}
 
-{% block content_title %}Ajouter un alias{% endblock %}
+{% block content_title %}{{ "Add new alias" | trans }}{% endblock %}
 
 {% block content_body %}
     {{ form_start(form) }}
@@ -23,10 +23,10 @@
     {{ form_row(form.tags) }}
     <div class="row">
         <div class="col-sm-6">
-            <a class="btn btn-block btn-secondary" href="{{ path('email_index') }}">Annuler</a>
+            <a class="btn btn-block btn-secondary" href="{{ path('email_index') }}">{{ "Cancel" | trans }}</a>
         </div>
         <div class="col-sm-6">
-            <button class="btn btn-block btn-success">Sauvegarder</button>
+            <button class="btn btn-block btn-success">{{ "Save" | trans }}</button>
         </div>
     </div>
     {{ form_end(form) }}

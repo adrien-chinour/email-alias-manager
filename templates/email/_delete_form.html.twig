@@ -2,5 +2,5 @@
       onsubmit="return confirm('{{ 'Are you sure ?' | trans }}');">
     <input type="hidden" name="_method" value="DELETE">
     <input type="hidden" name="_token" value="{{ csrf_token('delete' ~ email.id) }}">
-    <button class="btn btn-block btn-danger">Supprimer</button>
+    <button class="btn btn-block btn-danger">{{ "Delete this alias" | trans }}</button>
 </form>
