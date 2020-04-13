@@ -29,7 +29,7 @@ final class CreateUserCommand extends Command
         $this
             ->setName('app:user:create')
             ->setAliases(['a:u:c'])
-            ->setDescription('Permet de créer un utilisateur');
+            ->setDescription('Create a new admin user');
     }
 
     /**
@@ -41,14 +41,12 @@ final class CreateUserCommand extends Command
     protected function execute(InputInterface $input, OutputInterface $output)
     {
         $io = new SymfonyStyle($input, $output);
-        $username = $io->ask('Username');
-        $password = $io->askHidden('Password');
 
         $user = (new User())
-            ->setUuid($username)
+            ->setUuid($io->ask('Username'))
             ->setRoles(['ROLE_ADMIN', 'ROLE_USER']);
 
-        $user->setPassword($this->encoder->encodePassword($user, $password));
+        $user->setPassword($this->encoder->encodePassword($user, $io->askHidden('Password')));
 
         $this->repository->save($user);
 
