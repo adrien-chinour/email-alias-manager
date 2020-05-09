@@ -14,38 +14,15 @@ manage alias, import/export aliases easily.
 
 ## Installation
 
-Clone this repo:
+Build project and start docker environment
 ```bash
-git clone https://github.com/adrien-chinour/ellias.git
-cd ellias
-```
-
-Create `.env` file:
-```bash
-# for default settings
-cp .env.dist .env
-```
-
-Install all dependencies:
-```bash
-composer install
+docker-compose build
+docker-compose up -d
+docker exec ellias_php composer setup
 yarn install
 ```
 
-Create database, by default it will create a sqlite db on `var` folder:
+Create a new admin user
+```shell script
+docker exec -it ellias_php bin/console app:user:create
 ```
-bin/console doctrine:database:create
-bin/console doctrine:migrations:migrate
-```
-
-Create a user with the `app:user:create` command:
-```bash
-bin/console app:user:create
-# enter username and password for user
-```
-
-You can now open your browser and log in.
-
-## Usage
-
-## Add provider

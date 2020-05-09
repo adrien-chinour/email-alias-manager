@@ -24,7 +24,7 @@ services:
         tags: ['controller.service_arguments']
 
     # update this line with your custom provider implementation
-    App\Service\AliasApiInterface: '@App\Provider\Fake\FakeAliasApi'
+    App\Service\AliasApiInterface: '@App\Provider\Ovh\OvhAliasApi'
 
     # add more service definitions when explicit configuration is needed
     # please note that last definitions always *replace* previous ones

@@ -16,6 +16,7 @@
         "ext-json": "*",
         "ext-zip": "*",
         "api-platform/api-pack": "^1.2",
+        "knplabs/knp-paginator-bundle": "^5.2",
         "ovh/ovh": "^2.0",
         "sensio/framework-extra-bundle": "^5.1",
         "symfony/apache-pack": "^1.0",
@@ -86,7 +87,8 @@
             "@auto-scripts"
         ],
         "phpcs": "vendor/bin/phpcs",
-        "test": "bin/phpunit"
+        "test": "bin/phpunit",
+        "setup": "docker/php/setup.sh"
     },
     "conflict": {
         "symfony/symfony": "*"

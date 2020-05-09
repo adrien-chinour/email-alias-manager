@@ -1,0 +1,17 @@
+version: '2'
+services:
+    nginx:
+        container_name: ellias_nginx
+        image: nginx:latest
+        depends_on:
+            - php
+        ports:
+            - "8000:80"
+        volumes:
+            - ./:/app
+            - ./docker/nginx/default.conf:/etc/nginx/conf.d/default.conf
+    php:
+        container_name: ellias_php
+        build: docker/php
+        volumes:
+            - .:/app
