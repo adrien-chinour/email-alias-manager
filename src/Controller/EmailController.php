@@ -43,13 +43,15 @@ final class EmailController extends AbstractController
 
     /**
      * @Route("/", name="email_index", methods={"GET"})
+     * @param \Symfony\Component\HttpFoundation\Request $request
+     *
      * @return Response
      */
-    public function index(): Response
+    public function index(Request $request): Response
     {
         return $this->render(
             'email/index.html.twig',
-            ['emails' => $this->repository->findAll()]
+            ['emails' => $this->repository->paginate($request->query->getInt('page', 1))]
         );
     }
 

@@ -4,6 +4,8 @@ namespace App\Repository;
 
 use App\Entity\Email;
 use Doctrine\Common\Persistence\ManagerRegistry;
+use Knp\Component\Pager\Pagination\PaginationInterface;
+use Knp\Component\Pager\PaginatorInterface;
 
 /**
  * @method Email|null find($id, $lockMode = null, $lockVersion = null)
@@ -16,9 +18,17 @@ use Doctrine\Common\Persistence\ManagerRegistry;
 class EmailRepository extends AbstractEntityRepository
 {
 
-    public function __construct(ManagerRegistry $registry)
+    private const MAX_ITEM_PER_PAGE = 10;
+
+    /**
+     * @var \Knp\Component\Pager\PaginatorInterface
+     */
+    private $pagination;
+
+    public function __construct(ManagerRegistry $registry, PaginatorInterface $pagination)
     {
         parent::__construct($registry, Email::class);
+        $this->pagination = $pagination;
     }
 
     public function getAlias($email): array
@@ -36,5 +46,11 @@ class EmailRepository extends AbstractEntityRepository
             ->getResult();
 
         return $result ?? [];
+    }
+
+    public function paginate(int $page): PaginationInterface
+    {
+        $query = $this->createQueryBuilder('e')->getQuery();
+        return $this->pagination->paginate($query, $page, self::MAX_ITEM_PER_PAGE);
     }
 }
