@@ -13,5 +13,3 @@
  ```
 
 2. Update **service** definition to wiring `AliasApiInterface` with `OvhAliasApi`.
-
-3. Reload cache and voila.

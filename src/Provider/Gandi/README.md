@@ -9,5 +9,3 @@
  ```
 
 2. Update **service** definition to wiring `AliasApiInterface` with `GandiAliasApi`.
-
-3. Reload cache and voila.

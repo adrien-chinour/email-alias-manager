@@ -2,9 +2,10 @@
 
 namespace App\Exception;
 
+use Exception;
 use Throwable;
 
-class ApiCallException extends \Exception
+class ApiCallException extends Exception
 {
     public function __construct($provider, $method, $message = "", $code = 0, Throwable $previous = null)
     {
