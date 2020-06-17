@@ -2,7 +2,7 @@
 
 namespace App\Provider\Gandi;
 
-use App\Exception\ApiCallException;
+use App\Exception\ApiCallException as ApiCallExceptionAlias;
 use App\Service\AliasApiInterface;
 use App\Service\EmailTools;
 use DateInterval;
@@ -25,11 +25,6 @@ class GandiAliasApi implements AliasApiInterface
 
     private string $apiKey;
 
-    private bool $caching = false;
-
-    /**
-     * @var FilesystemAdapter
-     */
     private FilesystemAdapter $cache;
 
     public function __construct(LoggerInterface $logger, HttpClientInterface $httpClient)
@@ -51,7 +46,7 @@ class GandiAliasApi implements AliasApiInterface
      * @param string $url
      * @param array $options
      * @return array
-     * @throws ApiCallException
+     * @throws ApiCallExceptionAlias
      */
     private function request(string $method, string $url, array $options = []): array
     {
@@ -68,31 +63,32 @@ class GandiAliasApi implements AliasApiInterface
             }
             $content = json_decode($response->getContent(), true);
         } catch (Throwable $exception) {
-            throw new ApiCallException("Gandi", "{$method} : {$url}", $exception->getMessage());
+            throw new ApiCallExceptionAlias("Gandi", "{$method} : {$url}", $exception->getMessage());
         }
+
         return $content;
     }
 
     /**
      * @return array
-     * @throws ApiCallException
+     * @throws ApiCallExceptionAlias|\Psr\Cache\InvalidArgumentException
      */
     private function getDomains()
     {
         $item = $this->cache->getItem('domains');
-        if (!$item->isHit()) {
-            $domains = [];
-            foreach ($this->request('GET', self::BASE_URL . '/domain/domains') as $domain) {
-                $domains[] = $domain['fqdn_unicode'] ?? NULL;
-            }
-            $domains = array_filter($domains); // remove null domains
-
-            $item->set($domains);
-            $item->expiresAfter(DateInterval::createFromDateString('1 hour'));
-            $this->cache->save($item);
-        } else {
-            $domains = $item->get();
+        if ($item->isHit()) {
+            return $item->get();
         }
+
+        $domains = [];
+        foreach ($this->request('GET', sprintf('%s/domain/domains', self::BASE_URL)) as $domain) {
+            $domains[] = $domain['fqdn_unicode'];
+        }
+
+        // set user domains in cache
+        $item->set($domains);
+        $item->expiresAfter(DateInterval::createFromDateString('1 hour'));
+        $this->cache->save($item);
 
         return $domains;
     }
@@ -100,19 +96,21 @@ class GandiAliasApi implements AliasApiInterface
     /**
      * @param string $domain
      * @return array
-     * @throws ApiCallException
+     * @throws ApiCallExceptionAlias|\Psr\Cache\InvalidArgumentException
      */
     private function getMailboxes(string $domain): array
     {
         $item = $this->cache->getItem("mailboxes.$domain");
-        if (!$item->isHit()) {
-            $mailboxes = $this->request('GET', sprintf("%s/email/mailboxes/%s", self::BASE_URL, $domain));
-            $item->set($mailboxes);
-            $item->expiresAfter(DateInterval::createFromDateString('1 hour'));
-            $this->cache->save($item);
-        } else {
-            $mailboxes = $item->get();
+        if ($item->isHit()) {
+            return $item->get();
         }
+
+        $mailboxes = $this->request('GET', sprintf("%s/email/mailboxes/%s", self::BASE_URL, $domain));
+
+        // Set domain mailboxes in cache
+        $item->set($mailboxes);
+        $item->expiresAfter(DateInterval::createFromDateString('1 hour'));
+        $this->cache->save($item);
 
         return $mailboxes;
     }
@@ -120,7 +118,7 @@ class GandiAliasApi implements AliasApiInterface
     /**
      * @param array $aliases
      * @param array $mailbox
-     * @throws ApiCallException
+     * @throws ApiCallExceptionAlias
      */
     private function updateMailboxAlias(array $aliases, array $mailbox): void
     {
@@ -138,14 +136,14 @@ class GandiAliasApi implements AliasApiInterface
 
     /**
      * @return array
-     * @throws ApiCallException
+     * @throws ApiCallExceptionAlias|\Psr\Cache\InvalidArgumentException
      */
     public function getEmails(): array
     {
         $emails = [];
         foreach ($this->getDomains() as $domain) {
             foreach ($this->getMailboxes($domain) as $mailbox) {
-                $emails[] = $mailbox['address'] ?? NULL;
+                $emails[] = $mailbox['address'];
             }
         }
 
@@ -155,18 +153,30 @@ class GandiAliasApi implements AliasApiInterface
     /**
      * @param string $email
      * @return array|null
-     * @throws ApiCallException
+     * @throws ApiCallExceptionAlias|\Psr\Cache\InvalidArgumentException
      */
-    private function getMailbox(string $email): ?array
+    private function getMailboxDetails(string $email): ?array
     {
-        $domain = EmailTools::getDomain($email);
+        $item = $this->cache->getItem(sprintf("mailbox.%s", md5($email)));
+        if ($item->isHit()) {
+            return $item->get();
+        }
 
+        $domain = EmailTools::getDomain($email);
         foreach ($this->getMailboxes($domain) as $mailbox) {
             if ($mailbox['address'] === $email) {
-                return $this->request(
+
+                $mailbox = $this->request(
                     'GET',
                     sprintf("%s/email/mailboxes/%s/%s", self::BASE_URL, $domain, $mailbox['id'])
                 );
+
+                // Set email mailbox in cache
+                $item->set($mailbox);
+                $item->expiresAfter(DateInterval::createFromDateString('1 hour'));
+                $this->cache->save($item);
+
+                return $mailbox;
             }
         }
 
@@ -176,11 +186,11 @@ class GandiAliasApi implements AliasApiInterface
     /**
      * @param string $email
      * @return array
-     * @throws ApiCallException
+     * @throws ApiCallExceptionAlias|\Psr\Cache\InvalidArgumentException
      */
     public function getAlias(string $email): array
     {
-        $mailbox = $this->getMailbox($email);
+        $mailbox = $this->getMailboxDetails($email);
 
         $aliases = [];
         foreach ($mailbox['aliases'] as $alias) {
@@ -194,11 +204,12 @@ class GandiAliasApi implements AliasApiInterface
      * @param string $email
      * @param string $alias
      * @return bool
-     * @throws ApiCallException
+     * @throws ApiCallExceptionAlias|\Psr\Cache\InvalidArgumentException
      */
     public function addAlias(string $email, string $alias): bool
     {
-        $mailbox = $this->getMailbox($email);
+        $mailbox = $this->getMailboxDetails($email);
+        $this->cache->delete(sprintf("mailbox.%s", md5($email)));
         $aliases = $mailbox['aliases'];
 
         if (!array_search(EmailTools::withoutDomain($alias), $aliases)) {
@@ -213,18 +224,18 @@ class GandiAliasApi implements AliasApiInterface
      * @param string $email
      * @param string $alias
      * @return bool
-     * @throws ApiCallException
+     * @throws ApiCallExceptionAlias|\Psr\Cache\InvalidArgumentException
      */
     public function deleteAlias(string $email, string $alias): bool
     {
-        $mailbox = $this->getMailbox($email);
+        $mailbox = $this->getMailboxDetails($email);
+        $this->cache->delete(sprintf("mailbox.%s", md5($email)));
         $aliases = $mailbox['aliases'];
 
         if (($key = array_search($alias, $aliases)) !== false) {
             unset($aliases[$key]);
             $this->updateMailboxAlias($aliases, $mailbox);
         }
-
 
         return true;
     }

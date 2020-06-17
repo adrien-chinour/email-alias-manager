@@ -14,9 +14,9 @@ use Symfony\Contracts\Translation\TranslatorInterface;
 final class EmailType extends AbstractType
 {
 
-    private $api;
+    private AliasApiInterface $api;
 
-    private $translator;
+    private TranslatorInterface $translator;
 
     public function __construct(AliasApiInterface $api, TranslatorInterface $translator)
     {
