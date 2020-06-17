@@ -16,13 +16,14 @@
 
             <tbody>
             {% for key, alias in diff %}
-                <tr class={{ alias['is'] == 'local' ? "table-success" : "table-warning" }}>
+                <tr class={{ alias['exist'] == 'local' ? "table-success" : "table-warning" }}>
                     <td>{{ alias['email'] }}</td>
                     <td>{{ alias['alias'] }}</td>
-                    <td>{{ alias['is'] }}</td>
+                    <td>{{ alias['exist'] }}</td>
                     <td class="sr-only">
                         <input name="email[{{ key }}]" type="hidden" value="{{ alias['email'] }}">
                         <input name="alias[{{ key }}]" type="hidden" value="{{ alias['alias'] }}">
+                        <input name="exist[{{ key }}]" type="hidden" value="{{ alias['exist'] }}">
                     </td>
                 </tr>
             {% endfor %}

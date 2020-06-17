@@ -5,8 +5,10 @@ namespace App\Provider\Gandi;
 use App\Exception\ApiCallException;
 use App\Service\AliasApiInterface;
 use App\Service\EmailTools;
+use DateInterval;
 use InvalidArgumentException;
 use Psr\Log\LoggerInterface;
+use Symfony\Component\Cache\Adapter\FilesystemAdapter;
 use Symfony\Component\HttpKernel\Exception\HttpException;
 use Symfony\Contracts\HttpClient\HttpClientInterface;
 use Throwable;
@@ -23,6 +25,13 @@ class GandiAliasApi implements AliasApiInterface
 
     private string $apiKey;
 
+    private bool $caching = false;
+
+    /**
+     * @var FilesystemAdapter
+     */
+    private FilesystemAdapter $cache;
+
     public function __construct(LoggerInterface $logger, HttpClientInterface $httpClient)
     {
         if (!isset($_ENV[self::ENV_API_KEY])) {
@@ -34,6 +43,7 @@ class GandiAliasApi implements AliasApiInterface
         $this->apiKey = $_ENV[self::ENV_API_KEY];
         $this->apiLoger = $logger;
         $this->httpClient = $httpClient;
+        $this->cache = new FilesystemAdapter('gandi');
     }
 
     /**
@@ -69,13 +79,22 @@ class GandiAliasApi implements AliasApiInterface
      */
     private function getDomains()
     {
-        // TODO CACHE
-        $domains = [];
-        foreach ($this->request('GET', self::BASE_URL . '/domain/domains') as $domain) {
-            $domains[] = $domain['fqdn_unicode'] ?? NULL;
+        $item = $this->cache->getItem('domains');
+        if (!$item->isHit()) {
+            $domains = [];
+            foreach ($this->request('GET', self::BASE_URL . '/domain/domains') as $domain) {
+                $domains[] = $domain['fqdn_unicode'] ?? NULL;
+            }
+            $domains = array_filter($domains); // remove null domains
+
+            $item->set($domains);
+            $item->expiresAfter(DateInterval::createFromDateString('1 hour'));
+            $this->cache->save($item);
+        } else {
+            $domains = $item->get();
         }
 
-        return array_filter($domains); // remove null domains
+        return $domains;
     }
 
     /**
@@ -85,8 +104,17 @@ class GandiAliasApi implements AliasApiInterface
      */
     private function getMailboxes(string $domain): array
     {
-        // TODO CACHE
-        return $this->request('GET', sprintf("%s/email/mailboxes/%s", self::BASE_URL, $domain));
+        $item = $this->cache->getItem("mailboxes.$domain");
+        if (!$item->isHit()) {
+            $mailboxes = $this->request('GET', sprintf("%s/email/mailboxes/%s", self::BASE_URL, $domain));
+            $item->set($mailboxes);
+            $item->expiresAfter(DateInterval::createFromDateString('1 hour'));
+            $this->cache->save($item);
+        } else {
+            $mailboxes = $item->get();
+        }
+
+        return $mailboxes;
     }
 
     /**

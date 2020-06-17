@@ -6,6 +6,7 @@ use App\Entity\Email;
 use App\Repository\EmailRepository;
 use App\Service\AliasApiInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
+use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\Routing\Annotation\Route;
 
@@ -15,9 +16,9 @@ use Symfony\Component\Routing\Annotation\Route;
 final class SyncController extends AbstractController
 {
 
-    private $api;
+    private AliasApiInterface $api;
 
-    private $repository;
+    private EmailRepository $repository;
 
     public function __construct(AliasApiInterface $api, EmailRepository $repository)
     {
@@ -43,11 +44,23 @@ final class SyncController extends AbstractController
             $local = $this->repository->getAlias($email);
             $distant = $this->api->getAlias($email);
 
+            $local = array_map(function (Email $email) {
+                return $email->getAlias();
+            }, $local);
+
             foreach (array_diff($distant, $local) as $alias) {
                 $diff[] = [
                     'email' => $email,
                     'alias' => $alias,
-                    'is' => in_array($alias, $local) ? 'local' : 'distant',
+                    'exist' => 'distant',
+                ];
+            }
+
+            foreach (array_diff($local, $distant) as $alias) {
+                $diff[] = [
+                    'email' => $email,
+                    'alias' => $alias,
+                    'exist' => 'local',
                 ];
             }
         }
@@ -57,14 +70,15 @@ final class SyncController extends AbstractController
 
     /**
      * @Route("/add", name="sync_add", methods={"POST"})
-     * @param \Symfony\Component\HttpFoundation\Request $request
+     * @param Request $request
      *
-     * @return \Symfony\Component\HttpFoundation\RedirectResponse
+     * @return RedirectResponse
      */
     public function add(Request $request)
     {
         $aliases = $request->request->get('alias');
         $emails = $request->request->get('email');
+        $exists = $request->request->get('exist');
 
         if (empty($aliases)) {
             $this->addFlash('warning', 'Aucun alias à synchroniser');
@@ -72,10 +86,14 @@ final class SyncController extends AbstractController
         }
 
         foreach ($aliases as $key => $alias) {
-            $email = (new Email())
-                ->setTarget($emails[$key])
-                ->setAlias($alias);
-            $this->repository->save($email);
+            if ($exists[$key] === 'local') {
+                $this->api->addAlias($emails[$key], $alias);
+            } else {
+                $email = (new Email())
+                    ->setTarget($emails[$key])
+                    ->setAlias($alias);
+                $this->repository->save($email);
+            }
         }
 
         $this->addFlash('success', 'Synchronisation terminée');
