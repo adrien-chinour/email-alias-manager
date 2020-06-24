@@ -1,6 +1,5 @@
 <?php
 
-
 namespace App\Service;
 
 use App\Repository\EmailRepository;
@@ -10,7 +9,7 @@ use ZipArchive;
 final class EmailAliasExporter
 {
 
-    private $repository;
+    private EmailRepository $repository;
 
     public function __construct(EmailRepository $repository)
     {
@@ -81,7 +80,7 @@ final class EmailAliasExporter
     }
 
     /**
-     * @param array  $data
+     * @param array $data
      * @param string $filename
      *
      * @return string

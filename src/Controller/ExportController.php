@@ -6,8 +6,10 @@ use App\Repository\EmailRepository;
 use App\Service\EmailAliasExporter;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\BinaryFileResponse;
+use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Request;
-use Symfony\Component\HttpKernel\Exception\HttpException;
+use Symfony\Component\HttpFoundation\Response;
+use Symfony\Component\HttpFoundation\ResponseHeaderBag;
 use Symfony\Component\Routing\Annotation\Route;
 
 /**
@@ -18,9 +20,9 @@ final class ExportController extends AbstractController
 
     /**
      * @Route("/", name="export_select")
-     * @param \App\Repository\EmailRepository $repository
+     * @param EmailRepository $repository
      *
-     * @return \Symfony\Component\HttpFoundation\Response
+     * @return Response
      */
     public function selection(EmailRepository $repository)
     {
@@ -32,10 +34,10 @@ final class ExportController extends AbstractController
 
     /**
      * @Route("/csv", name="export_csv")
-     * @param \Symfony\Component\HttpFoundation\Request $request
-     * @param \App\Service\EmailAliasExporter           $exporter
+     * @param Request $request
+     * @param EmailAliasExporter $exporter
      *
-     * @return \Symfony\Component\HttpFoundation\BinaryFileResponse
+     * @return BinaryFileResponse|RedirectResponse
      */
     public function exportCSV(Request $request, EmailAliasExporter $exporter)
     {
@@ -49,11 +51,15 @@ final class ExportController extends AbstractController
         );
 
         if (!file_exists($filename)) {
-            throw new HttpException(404, "L'archive est vide");
+            $this->addFlash('warning', 'Aucun alias ou tag à exporter');
+            return $this->redirectToRoute('export_select');
         }
         $response = new BinaryFileResponse($filename);
         $response->headers->set('Content-Type', 'application/zip');
-        $response->deleteFileAfterSend();
+
+        $response
+            ->setContentDisposition(ResponseHeaderBag::DISPOSITION_ATTACHMENT, 'export-alias.zip')
+            ->deleteFileAfterSend();
 
         return $response;
     }
