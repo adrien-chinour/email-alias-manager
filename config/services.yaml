@@ -1,24 +1,24 @@
 services:
-  _defaults:
-    autowire: truew
-    autoconfigure: true
+    _defaults:
+        autowire: truew
+        autoconfigure: true
 
-  # Define namespace for DI
-  App\:
-    resource: '../src/*'
-    exclude: '../src/{DependencyInjection,Entity,Migrations,Tests,Kernel.php}'
-  App\Controller\:
-    resource: '../src/Controller'
-    tags: ['controller.service_arguments']
+    # Define namespace for DI
+    App\:
+        resource: '../src/*'
+        exclude: '../src/{DependencyInjection,Entity,Migrations,Tests,Kernel.php}'
+    App\Controller\:
+        resource: '../src/Controller'
+        tags: [ 'controller.service_arguments' ]
 
-  # Define used provider
-  App\Service\AliasApiInterface: '@App\Provider\Gandi\GandiAliasApi'
+    # Define used provider
+    App\Service\AliasApiInterface: '@App\Provider\Fake\FakeAliasApi'
 
-  # Logger decorator for api call
-  App\Service\AliasApiLoggerDecorator:
-    decorates: 'App\Service\AliasApiInterface'
+    # Logger decorator for api call
+    App\Service\AliasApiLoggerDecorator:
+        decorates: 'App\Service\AliasApiInterface'
 
-  ### API Platform configuration
+    ### API Platform configuration
 
-  App\DataPersister\AliasDataPersister:
-    decorates: 'api_platform.doctrine.orm.data_persister'
+    App\DataPersister\AliasDataPersister:
+        decorates: 'api_platform.doctrine.orm.data_persister'

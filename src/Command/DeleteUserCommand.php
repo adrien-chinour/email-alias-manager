@@ -12,10 +12,7 @@ use Symfony\Component\Console\Style\SymfonyStyle;
 final class DeleteUserCommand extends Command
 {
 
-    /**
-     * @var \App\Repository\UserRepository
-     */
-    private $repository;
+    private UserRepository $repository;
 
     public function __construct(UserRepository $repository, string $name = null)
     {
