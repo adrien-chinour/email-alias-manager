@@ -2,45 +2,42 @@
 
 namespace App\Repository;
 
-use App\Entity\Email;
+use App\Entity\Alias;
 use Doctrine\Common\Persistence\ManagerRegistry;
 use Knp\Component\Pager\Pagination\PaginationInterface;
 use Knp\Component\Pager\PaginatorInterface;
 
 /**
- * @method Email|null find($id, $lockMode = null, $lockVersion = null)
- * @method Email|null findOneBy(array $criteria, array $orderBy = null)
- * @method void       save(Email $entity)
- * @method void       delete(Email $entity)
- * @method Email[]    findAll()
- * @method Email[]    findBy(array $criteria, array $orderBy = null, $limit = null, $offset = null)
+ * @method Alias|null find($id, $lockMode = null, $lockVersion = null)
+ * @method Alias|null findOneBy(array $criteria, array $orderBy = null)
+ * @method void       save(Alias $entity)
+ * @method void       delete(Alias $entity)
+ * @method Alias[]    findAll()
+ * @method Alias[]    findBy(array $criteria, array $orderBy = null, $limit = null, $offset = null)
  */
-class EmailRepository extends AbstractEntityRepository
+class AliasRepository extends AbstractEntityRepository
 {
 
     private const MAX_ITEM_PER_PAGE = 10;
 
-    /**
-     * @var \Knp\Component\Pager\PaginatorInterface
-     */
-    private $pagination;
+    private PaginatorInterface $pagination;
 
     public function __construct(ManagerRegistry $registry, PaginatorInterface $pagination)
     {
-        parent::__construct($registry, Email::class);
+        parent::__construct($registry, Alias::class);
         $this->pagination = $pagination;
     }
 
-    public function getAlias($email): array
+    public function getAlias(string $email): array
     {
-        return $this->findBy(['target' => $email]);
+        return $this->findBy(['realEmail' => $email]);
     }
 
     public function search(string $search): array
     {
         $result = $this
             ->createQueryBuilder('e')
-            ->where('e.alias LIKE :search')
+            ->where('e.aliasEmail LIKE :search')
             ->setParameter('search', "%$search%")
             ->getQuery()
             ->getResult();

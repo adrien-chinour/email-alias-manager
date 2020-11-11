@@ -2,16 +2,16 @@
 
 namespace App\Service;
 
-use App\Repository\EmailRepository;
+use App\Repository\AliasRepository;
 use Symfony\Component\HttpKernel\Exception\HttpException;
 use ZipArchive;
 
 final class EmailAliasExporter
 {
 
-    private EmailRepository $repository;
+    private AliasRepository $repository;
 
-    public function __construct(EmailRepository $repository)
+    public function __construct(AliasRepository $repository)
     {
         $this->repository = $repository;
     }
@@ -60,16 +60,16 @@ final class EmailAliasExporter
 
             if ($alias !== null) {
                 $data['alias'][] = [
-                    'email' => $alias->getTarget(),
-                    'alias' => $alias->getAlias(),
+                    'email' => $alias->getRealEmail(),
+                    'alias' => $alias->getAliasEmail(),
                 ];
             }
 
             if (in_array($id, $tags)) {
                 foreach ($alias->getTags() as $tag) {
                     $data['tags'][] = [
-                        'email' => $alias->getTarget(),
-                        'alias' => $alias->getAlias(),
+                        'email' => $alias->getRealEmail(),
+                        'alias' => $alias->getAliasEmail(),
                         'tag' => $tag,
                     ];
                 }

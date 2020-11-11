@@ -1,5 +1,5 @@
 resources:
-    App\Entity\Email:
+    App\Entity\Alias:
         collectionOperations:
             get: ~
             post: ~
@@ -7,9 +7,6 @@ resources:
             get: ~
             delete: ~
             patch:
-                denormalization_context:
-                    groups: ['update']
-            put:
                 denormalization_context:
                     groups: ['update']
 

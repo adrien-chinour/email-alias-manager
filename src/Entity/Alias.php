@@ -5,9 +5,9 @@ namespace App\Entity;
 use Doctrine\ORM\Mapping as ORM;
 
 /**
- * @ORM\Entity(repositoryClass="App\Repository\EmailRepository")
+ * @ORM\Entity(repositoryClass="App\Repository\AliasRepository")
  */
-class Email
+class Alias
 {
 
     /**
@@ -15,49 +15,47 @@ class Email
      * @ORM\GeneratedValue()
      * @ORM\Column(type="integer")
      */
-    private $id;
+    private int $id;
 
     /**
      * @ORM\Column(type="string", length=255)
      */
-    private $target;
+    private ?string $realEmail = null;
 
     /**
      * @ORM\Column(type="string", length=255)
      */
-    private $alias;
+    private ?string $aliasEmail = null;
 
     /**
      * @ORM\Column(type="array")
      */
-    private $tags = [];
+    private array $tags = [];
 
     public function getId(): ?int
     {
         return $this->id;
     }
 
-    public function getTarget(): ?string
+    public function getRealEmail(): ?string
     {
-        return $this->target;
+        return $this->realEmail;
     }
 
-    public function setTarget(string $target): self
+    public function setRealEmail(string $realEmail): self
     {
-        $this->target = $target;
-
+        $this->realEmail = $realEmail;
         return $this;
     }
 
-    public function getAlias(): ?string
+    public function getAliasEmail(): ?string
     {
-        return $this->alias;
+        return $this->aliasEmail;
     }
 
-    public function setAlias(string $alias): self
+    public function setAliasEmail(string $aliasEmail): self
     {
-        $this->alias = $alias;
-
+        $this->aliasEmail = $aliasEmail;
         return $this;
     }
 
@@ -75,12 +73,12 @@ class Email
 
     public function __toString(): string
     {
-        return $this->getAlias();
+        return $this->aliasEmail;
     }
 
     public function getDomain(): string
     {
-        $email = explode('@', $this->getTarget());
+        $email = explode('@', $this->realEmail);
         if (count($email) < 2) {
             return "";
         }

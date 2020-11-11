@@ -24,13 +24,13 @@ class LoginFormAuthenticator extends AbstractFormLoginAuthenticator
 
     use TargetPathTrait;
 
-    private $entityManager;
+    private EntityManagerInterface $entityManager;
 
-    private $urlGenerator;
+    private UrlGeneratorInterface $urlGenerator;
 
-    private $csrfTokenManager;
+    private CsrfTokenManagerInterface $csrfTokenManager;
 
-    private $passwordEncoder;
+    private UserPasswordEncoderInterface $passwordEncoder;
 
     public function __construct(
         EntityManagerInterface $entityManager,
@@ -75,7 +75,6 @@ class LoginFormAuthenticator extends AbstractFormLoginAuthenticator
         $user = $this->entityManager->getRepository(User::class)->findOneBy(['uuid' => $credentials['uuid']]);
 
         if (!$user) {
-            // fail authentication with a custom error
             throw new CustomUserMessageAuthenticationException('Uuid could not be found.');
         }
 

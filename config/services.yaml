@@ -20,5 +20,5 @@ services:
 
   ### API Platform configuration
 
-  App\DataPersister\EmailDataPersister:
+  App\DataPersister\AliasDataPersister:
     decorates: 'api_platform.doctrine.orm.data_persister'

@@ -3,16 +3,15 @@
 namespace App\DataPersister;
 
 use ApiPlatform\Core\DataPersister\ContextAwareDataPersisterInterface;
-use ApiPlatform\Core\Serializer\AbstractItemNormalizer;
-use App\Entity\Email;
+use App\Entity\Alias;
 use App\Service\AliasApiInterface;
 
-final class EmailDataPersister implements ContextAwareDataPersisterInterface
+final class AliasDataPersister implements ContextAwareDataPersisterInterface
 {
 
-    private $decorated;
+    private ContextAwareDataPersisterInterface $decorated;
 
-    private $api;
+    private AliasApiInterface $api;
 
     public function __construct(ContextAwareDataPersisterInterface $decorated, AliasApiInterface $api)
     {
@@ -25,11 +24,11 @@ final class EmailDataPersister implements ContextAwareDataPersisterInterface
      */
     public function supports($data, array $context = []): bool
     {
-        return $data instanceof Email;
+        return $data instanceof Alias;
     }
 
     /**
-     * @param Email $data
+     * @param Alias $data
      * @param array $context
      *
      * @return object|void
@@ -39,14 +38,14 @@ final class EmailDataPersister implements ContextAwareDataPersisterInterface
         $result = $this->decorated->persist($data, $context);
 
         if (($context['collection_operation_name'] ?? null) === 'post') {
-            $this->api->addAlias($data->getTarget(), $data->getAlias());
+            $this->api->addAlias($data->getRealEmail(), $data->getAliasEmail());
         }
 
         return $result;
     }
 
     /**
-     * @param Email $data
+     * @param Alias $data
      * @param array $context
      *
      * @return object|null
@@ -56,7 +55,7 @@ final class EmailDataPersister implements ContextAwareDataPersisterInterface
         $result = $this->decorated->remove($data, $context);
 
         if (($context['collection_operation_name'] ?? null) === 'delete') {
-            $this->api->deleteAlias($data->getTarget(), $data->getAlias());
+            $this->api->deleteAlias($data->getRealEmail(), $data->getAliasEmail());
         }
 
         return $result;

@@ -1,5 +1,5 @@
 FROM php:7.4-fpm
-MAINTAINER Adrien Chinour <contact@chinour.fr>
+MAINTAINER Adrien Chinour <git@chinour.fr>
 
 RUN apt-get update \
     && apt-get install -y --no-install-recommends \

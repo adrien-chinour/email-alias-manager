@@ -25,7 +25,7 @@ final class SecurityController extends AbstractController
         $lastUsername = $authenticationUtils->getLastUsername();
 
         if ($this->isGranted('IS_AUTHENTICATED_FULLY')) {
-            return $this->redirectToRoute('email_new');
+            return $this->redirectToRoute('alias_new');
         }
 
         return $this->render(

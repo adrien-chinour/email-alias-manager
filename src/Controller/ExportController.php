@@ -2,7 +2,7 @@
 
 namespace App\Controller;
 
-use App\Repository\EmailRepository;
+use App\Repository\AliasRepository;
 use App\Service\EmailAliasExporter;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\BinaryFileResponse;
@@ -20,11 +20,11 @@ final class ExportController extends AbstractController
 
     /**
      * @Route("/", name="export_select")
-     * @param EmailRepository $repository
+     * @param AliasRepository $repository
      *
      * @return Response
      */
-    public function selection(EmailRepository $repository)
+    public function selection(AliasRepository $repository)
     {
         return $this->render(
             'export/select.html.twig',
