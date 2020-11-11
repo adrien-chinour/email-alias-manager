@@ -1,4 +1,4 @@
-App\Entity\Email:
+App\Entity\Alias:
     attributes:
         tags:
             groups: ['update']

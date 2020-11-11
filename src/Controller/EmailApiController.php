@@ -7,9 +7,9 @@ use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\Routing\Annotation\Route;
 
 /**
- * @Route("/api/target")
+ * @Route("/api/email")
  */
-final class TargetEmailApiController
+final class EmailApiController
 {
 
     private AliasApiInterface $api;
