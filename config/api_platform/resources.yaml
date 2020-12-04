@@ -4,6 +4,7 @@ resources:
             get: ~
             post: ~
         itemOperations:
+            get: ~
             delete: ~
             patch:
                 denormalization_context:
