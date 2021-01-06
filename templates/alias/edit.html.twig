@@ -7,26 +7,26 @@
 
 {% block content_title %}
     {{ "Edit alias" | trans }}
-    <span class="badge badge-light badge-pill">{{ email.alias }}</span>
+    <span class="badge badge-light badge-pill">{{ alias.aliasEmail }}</span>
 {% endblock %}
 
 {% block content_body %}
     <div class="row">
         <div class="ml-auto mb-3">
-            <a class="btn btn-sm btn-secondary" href="{{ path('email_index') }}">
+            <a class="btn btn-sm btn-secondary" href="{{ path('alias_index') }}">
                <i class="fas fa-door-open"></i> {{ "Cancel" | trans }}
             </a>
         </div>
     </div>
     {{ form_start(form) }}
-    <div id="select-tags-input" class="form-group" data-tags="{{ email.tags | json_encode }}">
+    <div id="select-tags-input" class="form-group" data-tags="{{ alias.tags | json_encode }}">
         {{ form_label(form.tags) }}
         {{ form_widget(form.tags) }}
     </div>
     {{ form_end(form) }}
     <div class="row">
         <div class="col-md-6">
-            {{ include('email/_delete_form.html.twig') }}
+            {{ include('alias/_delete_form.html.twig') }}
         </div>
         <div class="col-md-6">
             <button type="submit" form="{{ form.vars.attr.id }}" class="btn btn-block btn-success">

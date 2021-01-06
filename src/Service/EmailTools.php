@@ -1,8 +1,6 @@
 <?php
 
-
 namespace App\Service;
-
 
 abstract class EmailTools
 {
@@ -27,5 +25,4 @@ abstract class EmailTools
     {
         return self::explode($email)[0];
     }
-
 }

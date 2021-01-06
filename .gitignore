@@ -18,6 +18,7 @@
 ### Others
 .idea
 node_modules
+http/*.private.env.json
 
 ###> symfony/webpack-encore-bundle ###
 /node_modules/

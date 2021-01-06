@@ -8,7 +8,7 @@
             {{ "My aliases" | trans }}
         </div>
         <div class="col-4 text-right">
-            <a href="{{ path('email_new') }}" class="btn btn-sm btn-success">{{ "Add new alias" | trans }}</a>
+            <a href="{{ path('alias_new') }}" class="btn btn-sm btn-success">{{ "Add new alias" | trans }}</a>
         </div>
     </div>
 {% endblock %}
@@ -25,17 +25,17 @@
             </tr>
             </thead>
             <tbody>
-            {% for email in emails %}
+            {% for alias in aliases %}
                 <tr>
-                    <td>{{ email.target }}</td>
-                    <td>{{ email.alias }}</td>
+                    <td>{{ alias.realEmail }}</td>
+                    <td>{{ alias.aliasEmail }}</td>
                     <td>
-                        {% for tag in email.tags %}
+                        {% for tag in alias.tags %}
                             <span class="badge badge-pill badge-info">{{ tag }}</span>
                         {% endfor %}
                     </td>
                     <td class="text-right">
-                        <a class="btn btn-sm btn-secondary" href="{{ path('email_edit', {'id': email.id}) }}">
+                        <a class="btn btn-sm btn-secondary" href="{{ path('alias_edit', {'id': alias.id}) }}">
                             <i class="fas fa-pen"></i>
                         </a>
                     </td>
@@ -48,7 +48,7 @@
             </tbody>
         </table>
         <div class="navigation">
-            {{ knp_pagination_render(emails) }}
+            {{ knp_pagination_render(aliases) }}
         </div>
     </div>
 {% endblock %}

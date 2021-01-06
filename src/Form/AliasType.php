@@ -2,16 +2,18 @@
 
 namespace App\Form;
 
-use App\Entity\Email;
+use App\Entity\Alias;
 use App\Service\AliasApiInterface;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\Extension\Core\Type\ChoiceType;
 use Symfony\Component\Form\Extension\Core\Type\TextType;
 use Symfony\Component\Form\FormBuilderInterface;
+use Symfony\Component\Form\FormEvent;
+use Symfony\Component\Form\FormEvents;
 use Symfony\Component\OptionsResolver\OptionsResolver;
 use Symfony\Contracts\Translation\TranslatorInterface;
 
-final class EmailType extends AbstractType
+final class AliasType extends AbstractType
 {
 
     private AliasApiInterface $api;
@@ -28,16 +30,23 @@ final class EmailType extends AbstractType
     {
         if (!$options['edition']) {
             $builder
-                ->add('target', ChoiceType::class, [
+                ->add('realEmail', ChoiceType::class, [
                     'label' => $this->translator->trans("Target"),
                     'choices' => $this->api->getEmails(),
                     'choice_label' => function ($value) {
                         return $value;
                     },
                 ])
-                ->add('alias', TextType::class, [
+                ->add('aliasEmail', TextType::class, [
                     'label' => $this->translator->trans("Alias"),
-                ]);
+                ])
+                ->addEventListener(FormEvents::SUBMIT, function (FormEvent $event) {
+                    /** @var Alias $alias */
+                    $alias = $event->getData();
+
+                    // update alias because domain not include in form
+                    $alias->setAliasEmail($alias->getAliasEmail() . $alias->getDomain());
+                });
         }
 
         $builder
@@ -54,7 +63,7 @@ final class EmailType extends AbstractType
     public function configureOptions(OptionsResolver $resolver)
     {
         $resolver->setDefaults([
-            'data_class' => Email::class,
+            'data_class' => Alias::class,
             'edition' => false,
             'attr' => ['id' => 'email-form']
         ]);

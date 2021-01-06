@@ -3,7 +3,7 @@ import '../../node_modules/select2/dist/css/select2.min.css'
 import '../../node_modules/select2/dist/js/select2.full.min'
 
 const inputAppendId = "input-append-alias"; // custom id set on page template
-const emailSelectId = "email_target"; // this id is define automatically from App\Form\EmailType
+const emailSelectId = "alias_realEmail"; // this id is define automatically from App\Form\AliasType
 
 window.addEventListener("load", function () {
     init();

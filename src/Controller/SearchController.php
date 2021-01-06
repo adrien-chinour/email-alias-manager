@@ -2,7 +2,7 @@
 
 namespace App\Controller;
 
-use App\Repository\EmailRepository;
+use App\Repository\AliasRepository;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\Routing\Annotation\Route;
@@ -16,11 +16,11 @@ final class SearchController extends AbstractController
     /**
      * @Route("/alias", name="search_alias")
      * @param \Symfony\Component\HttpFoundation\Request $request
-     * @param \App\Repository\EmailRepository           $repository
+     * @param \App\Repository\AliasRepository           $repository
      *
      * @return \Symfony\Component\HttpFoundation\Response
      */
-    public function alias(Request $request, EmailRepository $repository)
+    public function alias(Request $request, AliasRepository $repository)
     {
         $search = $request->query->get('alias');
 

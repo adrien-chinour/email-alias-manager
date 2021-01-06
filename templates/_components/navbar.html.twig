@@ -1,5 +1,5 @@
 <nav class="navbar navbar-expand-lg bg-secondary navbar-dark">
-    <a class="navbar-brand atma" href="{{ path('email_index') }}">{{ 'site.title' | trans }}</a>
+    <a class="navbar-brand atma" href="{{ path('alias_index') }}">{{ 'site.title' | trans }}</a>
     <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent"
             aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
         <span class="navbar-toggler-icon"></span>
@@ -7,8 +7,8 @@
 
     <div class="collapse navbar-collapse" id="navbarSupportedContent">
         <ul class="navbar-nav mr-auto">
-            <li class="nav-item {% if app.request.requestUri == path('email_index') %}active{% endif %}">
-                <a class="nav-link btn btn-secondary btn-pill mr-sm-2" href="{{ path('email_index') }}">
+            <li class="nav-item {% if app.request.requestUri == path('alias_index') %}active{% endif %}">
+                <a class="nav-link btn btn-secondary btn-pill mr-sm-2" href="{{ path('alias_index') }}">
                     {{ 'My aliases' | trans }}
                 </a>
             </li>

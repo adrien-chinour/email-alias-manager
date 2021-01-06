@@ -7,12 +7,12 @@ use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\Routing\Annotation\Route;
 
 /**
- * @Route("/api/target")
+ * @Route("/api/email")
  */
-final class TargetEmailApiController
+final class EmailApiController
 {
 
-    private $api;
+    private AliasApiInterface $api;
 
     public function __construct(AliasApiInterface $api)
     {
@@ -21,7 +21,7 @@ final class TargetEmailApiController
 
     /**
      * @Route("/", name="api_target_all")
-     * @return \Symfony\Component\HttpFoundation\JsonResponse
+     * @return JsonResponse
      */
     public function all()
     {

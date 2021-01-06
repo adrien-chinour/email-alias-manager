@@ -9,12 +9,12 @@
 
 {% block content_body %}
     {{ form_start(form) }}
-    {{ form_row(form.target) }}
+    {{ form_row(form.realEmail) }}
 
     <div class="form-group">
-        {{ form_label(form.alias) }}
+        {{ form_label(form.aliasEmail) }}
         <div class="input-group">
-            {{ form_widget(form.alias) }}
+            {{ form_widget(form.aliasEmail) }}
             <div class="input-group-append">
                 <span class="input-group-text" id="input-append-alias"></span>
             </div>
@@ -23,7 +23,7 @@
     {{ form_row(form.tags) }}
     <div class="row">
         <div class="col-sm-6">
-            <a class="btn btn-block btn-secondary" href="{{ path('email_index') }}">{{ "Cancel" | trans }}</a>
+            <a class="btn btn-block btn-secondary" href="{{ path('alias_index') }}">{{ "Cancel" | trans }}</a>
         </div>
         <div class="col-sm-6">
             <button class="btn btn-block btn-success">{{ "Save" | trans }}</button>

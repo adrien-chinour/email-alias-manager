@@ -2,8 +2,8 @@
 
 namespace App\Controller;
 
-use App\Entity\Email;
-use App\Repository\EmailRepository;
+use App\Entity\Alias;
+use App\Repository\AliasRepository;
 use App\Service\AliasApiInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\RedirectResponse;
@@ -18,9 +18,9 @@ final class SyncController extends AbstractController
 
     private AliasApiInterface $api;
 
-    private EmailRepository $repository;
+    private AliasRepository $repository;
 
-    public function __construct(AliasApiInterface $api, EmailRepository $repository)
+    public function __construct(AliasApiInterface $api, AliasRepository $repository)
     {
         $this->api = $api;
         $this->repository = $repository;
@@ -44,8 +44,8 @@ final class SyncController extends AbstractController
             $local = $this->repository->getAlias($email);
             $distant = $this->api->getAlias($email);
 
-            $local = array_map(function (Email $email) {
-                return $email->getAlias();
+            $local = array_map(function (Alias $alias) {
+                return $alias->getAliasEmail();
             }, $local);
 
             foreach (array_diff($distant, $local) as $alias) {
@@ -89,9 +89,9 @@ final class SyncController extends AbstractController
             if ($exists[$key] === 'local') {
                 $this->api->addAlias($emails[$key], $alias);
             } else {
-                $email = (new Email())
-                    ->setTarget($emails[$key])
-                    ->setAlias($alias);
+                $email = (new Alias())
+                    ->setRealEmail($emails[$key])
+                    ->setAliasEmail($alias);
                 $this->repository->save($email);
             }
         }
