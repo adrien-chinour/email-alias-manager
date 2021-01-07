@@ -17,10 +17,8 @@ use Symfony\Component\Routing\Annotation\Route;
  */
 final class ExportController extends AbstractController
 {
-
     /**
      * @Route("/", name="export_select")
-     * @param AliasRepository $repository
      *
      * @return Response
      */
@@ -34,15 +32,13 @@ final class ExportController extends AbstractController
 
     /**
      * @Route("/csv", name="export_csv")
-     * @param Request $request
-     * @param EmailAliasExporter $exporter
      *
      * @return BinaryFileResponse|RedirectResponse
      */
     public function exportCSV(Request $request, EmailAliasExporter $exporter)
     {
         $checked = function ($checkbox) {
-            return $checkbox === "on";
+            return 'on' === $checkbox;
         };
 
         $filename = $exporter->getZipArchve(
@@ -52,6 +48,7 @@ final class ExportController extends AbstractController
 
         if (!file_exists($filename)) {
             $this->addFlash('warning', 'Aucun alias ou tag à exporter');
+
             return $this->redirectToRoute('export_select');
         }
         $response = new BinaryFileResponse($filename);

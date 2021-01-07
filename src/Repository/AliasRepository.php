@@ -3,7 +3,7 @@
 namespace App\Repository;
 
 use App\Entity\Alias;
-use Doctrine\Common\Persistence\ManagerRegistry;
+use Doctrine\Persistence\ManagerRegistry;
 use Knp\Component\Pager\Pagination\PaginationInterface;
 use Knp\Component\Pager\PaginatorInterface;
 
@@ -17,7 +17,6 @@ use Knp\Component\Pager\PaginatorInterface;
  */
 class AliasRepository extends AbstractEntityRepository
 {
-
     private const MAX_ITEM_PER_PAGE = 10;
 
     private PaginatorInterface $pagination;
@@ -48,6 +47,7 @@ class AliasRepository extends AbstractEntityRepository
     public function paginate(int $page): PaginationInterface
     {
         $query = $this->createQueryBuilder('e')->getQuery();
+
         return $this->pagination->paginate($query, $page, self::MAX_ITEM_PER_PAGE);
     }
 }

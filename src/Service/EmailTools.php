@@ -4,12 +4,11 @@ namespace App\Service;
 
 abstract class EmailTools
 {
-
     private static function explode(string $email): array
     {
         $parts = explode('@', $email);
 
-        if (!isset($parts[1]) || count($parts) !== 2) {
+        if (!isset($parts[1]) || 2 !== count($parts)) {
             throw new \InvalidArgumentException("Wrong email format for '$email'");
         }
 

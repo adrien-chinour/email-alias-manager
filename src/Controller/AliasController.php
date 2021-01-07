@@ -3,9 +3,7 @@
 namespace App\Controller;
 
 use App\Entity\Alias;
-use App\Entity\Email;
 use App\Form\AliasType;
-use App\Form\EmailType;
 use App\Repository\AliasRepository;
 use App\Service\AliasApiInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
@@ -20,7 +18,6 @@ use Symfony\Contracts\Translation\TranslatorInterface;
  */
 final class AliasController extends AbstractController
 {
-
     private AliasApiInterface $api;
 
     private AliasRepository $repository;
@@ -36,9 +33,6 @@ final class AliasController extends AbstractController
 
     /**
      * @Route("/", name="alias_index", methods={"GET"})
-     * @param Request $request
-     *
-     * @return Response
      */
     public function index(Request $request): Response
     {
@@ -50,9 +44,6 @@ final class AliasController extends AbstractController
 
     /**
      * @Route("/new", name="alias_new", methods={"GET","POST"})
-     * @param Request $request
-     *
-     * @return Response
      */
     public function new(Request $request): Response
     {
@@ -75,10 +66,6 @@ final class AliasController extends AbstractController
 
     /**
      * @Route("/{id}/edit", name="alias_edit", methods={"GET","POST"})
-     * @param Request $request
-     * @param Alias $alias
-     *
-     * @return Response
      */
     public function edit(Request $request, Alias $alias): Response
     {
@@ -87,6 +74,7 @@ final class AliasController extends AbstractController
 
         if ($form->isSubmitted() && $form->isValid()) {
             $this->repository->save($alias);
+
             return $this->redirectToRoute('alias_index');
         }
 
@@ -95,15 +83,11 @@ final class AliasController extends AbstractController
 
     /**
      * @Route("/{id}", name="alias_delete", methods={"DELETE"})
-     * @param Request $request
-     * @param Alias $alias
-     *
-     * @return RedirectResponse
      */
     public function delete(Request $request, Alias $alias): RedirectResponse
     {
         if ($this->isCsrfTokenValid(
-            'delete' . $alias->getId(),
+            'delete'.$alias->getId(),
             $request->request->get('_token')
         )) {
             $this->api->deleteAlias($alias->getRealEmail(), $alias->getAliasEmail());

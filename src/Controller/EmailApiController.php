@@ -11,7 +11,6 @@ use Symfony\Component\Routing\Annotation\Route;
  */
 final class EmailApiController
 {
-
     private AliasApiInterface $api;
 
     public function __construct(AliasApiInterface $api)
@@ -21,6 +20,7 @@ final class EmailApiController
 
     /**
      * @Route("/", name="api_target_all")
+     *
      * @return JsonResponse
      */
     public function all()

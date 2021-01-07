@@ -9,15 +9,15 @@ use Doctrine\Migrations\AbstractMigration;
 
 final class Version20200628212751 extends AbstractMigration
 {
-    public function getDescription() : string
+    public function getDescription(): string
     {
         return '';
     }
 
-    public function up(Schema $schema) : void
+    public function up(Schema $schema): void
     {
         // this up() migration is auto-generated, please modify it to your needs
-        $this->abortIf($this->connection->getDatabasePlatform()->getName() !== 'sqlite', 'Migration can only be executed safely on \'sqlite\'.');
+        $this->abortIf('sqlite' !== $this->connection->getDatabasePlatform()->getName(), 'Migration can only be executed safely on \'sqlite\'.');
 
         $this->addSql('CREATE TABLE alias (id INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, real_email VARCHAR(255) NOT NULL, alias_email VARCHAR(255) NOT NULL, tags CLOB NOT NULL --(DC2Type:array)
         )');
@@ -25,10 +25,10 @@ final class Version20200628212751 extends AbstractMigration
         $this->addSql('DROP TABLE email');
     }
 
-    public function down(Schema $schema) : void
+    public function down(Schema $schema): void
     {
         // this down() migration is auto-generated, please modify it to your needs
-        $this->abortIf($this->connection->getDatabasePlatform()->getName() !== 'sqlite', 'Migration can only be executed safely on \'sqlite\'.');
+        $this->abortIf('sqlite' !== $this->connection->getDatabasePlatform()->getName(), 'Migration can only be executed safely on \'sqlite\'.');
 
         $this->addSql('CREATE TABLE email (id INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, target VARCHAR(255) NOT NULL, alias VARCHAR(255) NOT NULL, tags CLOB NOT NULL --(DC2Type:array)
         )');

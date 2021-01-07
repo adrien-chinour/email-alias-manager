@@ -3,7 +3,6 @@
 namespace App\Command;
 
 use App\Entity\Alias;
-use Doctrine\DBAL\ConnectionException;
 use Doctrine\ORM\EntityManagerInterface;
 use Exception;
 use Symfony\Component\Console\Command\Command;
@@ -41,10 +40,11 @@ class PurgeAliasCommand extends Command
     protected function execute(InputInterface $input, OutputInterface $output)
     {
         if (!$input->getOption('force')) {
-            $validation = $this->io->confirm("This command will removed all aliases on current database. Sure ?");
+            $validation = $this->io->confirm('This command will removed all aliases on current database. Sure ?');
 
             if (!$validation) {
-                $this->io->warning("Command aborded");
+                $this->io->warning('Command aborded');
+
                 return 0;
             }
         }
@@ -52,14 +52,15 @@ class PurgeAliasCommand extends Command
         $c = $this->manager->getConnection();
         $c->beginTransaction();
         try {
-            $c->query(sprintf("DELETE FROM %s", $this->manager->getClassMetadata(Alias::class)->getTableName()));
+            $c->query(sprintf('DELETE FROM %s', $this->manager->getClassMetadata(Alias::class)->getTableName()));
             $c->commit();
         } catch (Exception $e) {
             $this->io->error($e->getMessage());
+
             return 1;
         }
-        $this->io->success("Aliases purged.");
+        $this->io->success('Aliases purged.');
+
         return 0;
     }
-
 }

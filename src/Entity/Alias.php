@@ -9,7 +9,6 @@ use Doctrine\ORM\Mapping as ORM;
  */
 class Alias
 {
-
     /**
      * @ORM\Id()
      * @ORM\GeneratedValue()
@@ -45,6 +44,7 @@ class Alias
     public function setRealEmail(string $realEmail): self
     {
         $this->realEmail = $realEmail;
+
         return $this;
     }
 
@@ -56,6 +56,7 @@ class Alias
     public function setAliasEmail(string $aliasEmail): self
     {
         $this->aliasEmail = $aliasEmail;
+
         return $this;
     }
 
@@ -80,7 +81,7 @@ class Alias
     {
         $email = explode('@', $this->realEmail);
         if (count($email) < 2) {
-            return "";
+            return '';
         }
 
         return "@$email[1]";

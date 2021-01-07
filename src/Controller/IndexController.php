@@ -10,9 +10,9 @@ use Symfony\Component\Routing\Annotation\Route;
 
 final class IndexController extends AbstractController
 {
-
     /**
      * @Route("/", name="app_index")
+     *
      * @return RedirectResponse
      */
     public function index()
@@ -22,6 +22,7 @@ final class IndexController extends AbstractController
 
     /**
      * @Route("/health-check", name="health_check")
+     *
      * @return Response
      */
     public function health()

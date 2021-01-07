@@ -15,7 +15,6 @@ use Symfony\Component\Routing\Annotation\Route;
  */
 final class SyncController extends AbstractController
 {
-
     private AliasApiInterface $api;
 
     private AliasRepository $repository;
@@ -70,7 +69,6 @@ final class SyncController extends AbstractController
 
     /**
      * @Route("/add", name="sync_add", methods={"POST"})
-     * @param Request $request
      *
      * @return RedirectResponse
      */
@@ -82,11 +80,12 @@ final class SyncController extends AbstractController
 
         if (empty($aliases)) {
             $this->addFlash('warning', 'Aucun alias à synchroniser');
+
             return $this->redirectToRoute('sync_diff');
         }
 
         foreach ($aliases as $key => $alias) {
-            if ($exists[$key] === 'local') {
+            if ('local' === $exists[$key]) {
                 $this->api->addAlias($emails[$key], $alias);
             } else {
                 $email = (new Alias())
@@ -97,6 +96,7 @@ final class SyncController extends AbstractController
         }
 
         $this->addFlash('success', 'Synchronisation terminée');
+
         return $this->redirectToRoute('sync_diff');
     }
 }

@@ -8,10 +8,6 @@ use App\Service\AliasApiInterface;
 
 class FakeAliasApi implements AliasApiInterface
 {
-
-    /**
-     * @var FilesystemStorage
-     */
     private FilesystemStorage $storage;
 
     public function __construct()
@@ -55,6 +51,4 @@ class FakeAliasApi implements AliasApiInterface
 
         return true;
     }
-
-
 }

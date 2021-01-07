@@ -12,11 +12,8 @@ use Symfony\Component\Routing\Annotation\Route;
  */
 final class SearchController extends AbstractController
 {
-
     /**
      * @Route("/alias", name="search_alias")
-     * @param \Symfony\Component\HttpFoundation\Request $request
-     * @param \App\Repository\AliasRepository           $repository
      *
      * @return \Symfony\Component\HttpFoundation\Response
      */

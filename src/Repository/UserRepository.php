@@ -3,7 +3,7 @@
 namespace App\Repository;
 
 use App\Entity\User;
-use Doctrine\Common\Persistence\ManagerRegistry;
+use Doctrine\Persistence\ManagerRegistry;
 
 /**
  * @method User|null find($id, $lockMode = null, $lockVersion = null)
@@ -15,7 +15,6 @@ use Doctrine\Common\Persistence\ManagerRegistry;
  */
 class UserRepository extends AbstractEntityRepository
 {
-
     public function __construct(ManagerRegistry $registry)
     {
         parent::__construct($registry, User::class);

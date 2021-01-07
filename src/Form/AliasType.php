@@ -15,7 +15,6 @@ use Symfony\Contracts\Translation\TranslatorInterface;
 
 final class AliasType extends AbstractType
 {
-
     private AliasApiInterface $api;
 
     private TranslatorInterface $translator;
@@ -31,21 +30,21 @@ final class AliasType extends AbstractType
         if (!$options['edition']) {
             $builder
                 ->add('realEmail', ChoiceType::class, [
-                    'label' => $this->translator->trans("Target"),
+                    'label' => $this->translator->trans('Target'),
                     'choices' => $this->api->getEmails(),
                     'choice_label' => function ($value) {
                         return $value;
                     },
                 ])
                 ->add('aliasEmail', TextType::class, [
-                    'label' => $this->translator->trans("Alias"),
+                    'label' => $this->translator->trans('Alias'),
                 ])
                 ->addEventListener(FormEvents::SUBMIT, function (FormEvent $event) {
                     /** @var Alias $alias */
                     $alias = $event->getData();
 
                     // update alias because domain not include in form
-                    $alias->setAliasEmail($alias->getAliasEmail() . $alias->getDomain());
+                    $alias->setAliasEmail($alias->getAliasEmail().$alias->getDomain());
                 });
         }
 
@@ -65,7 +64,7 @@ final class AliasType extends AbstractType
         $resolver->setDefaults([
             'data_class' => Alias::class,
             'edition' => false,
-            'attr' => ['id' => 'email-form']
+            'attr' => ['id' => 'email-form'],
         ]);
     }
 }

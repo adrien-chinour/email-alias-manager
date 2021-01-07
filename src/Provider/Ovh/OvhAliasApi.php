@@ -9,7 +9,6 @@ use Ovh\Api;
 
 class OvhAliasApi implements AliasApiInterface
 {
-
     private string $baseUrl;
 
     private Api $api;
@@ -23,7 +22,7 @@ class OvhAliasApi implements AliasApiInterface
             }
         }
 
-        $this->baseUrl = '/email/pro/' . $_ENV['OVH_SERVICE'];
+        $this->baseUrl = '/email/pro/'.$_ENV['OVH_SERVICE'];
         $this->api = new Api($_ENV['OVH_KEY'], $_ENV['OVH_SECRET'], $_ENV['OVH_ENDPOINT'], $_ENV['OVH_CONSUMER']);
     }
 
@@ -44,6 +43,7 @@ class OvhAliasApi implements AliasApiInterface
         } catch (ClientException $exception) {
             return false;
         }
+
         return true;
     }
 
@@ -54,6 +54,7 @@ class OvhAliasApi implements AliasApiInterface
         } catch (ClientException $exception) {
             return false;
         }
+
         return true;
     }
 }

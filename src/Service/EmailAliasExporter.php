@@ -8,7 +8,6 @@ use ZipArchive;
 
 final class EmailAliasExporter
 {
-
     private AliasRepository $repository;
 
     public function __construct(AliasRepository $repository)
@@ -16,19 +15,13 @@ final class EmailAliasExporter
         $this->repository = $repository;
     }
 
-    /**
-     * @param array $aliases
-     * @param array $tags
-     *
-     * @return string
-     */
     public function getZipArchve(array $aliases, array $tags): string
     {
         $data = $this->process($aliases, $tags);
 
         $zip = new ZipArchive();
-        $filename = "/tmp/export.zip";
-        if ($zip->open($filename, ZipArchive::CREATE) !== true) {
+        $filename = '/tmp/export.zip';
+        if (true !== $zip->open($filename, ZipArchive::CREATE)) {
             throw new HttpException(500, "Impossible d'ouvrir le fichier <$filename>\n");
         }
 
@@ -46,19 +39,13 @@ final class EmailAliasExporter
         return $filename;
     }
 
-    /**
-     * @param array $aliases
-     * @param array $tags
-     *
-     * @return array
-     */
     private function process(array $aliases, array $tags): array
     {
         $data = [];
         foreach ($aliases as $id) {
             $alias = $this->repository->find($id);
 
-            if ($alias !== null) {
+            if (null !== $alias) {
                 $data['alias'][] = [
                     'email' => $alias->getRealEmail(),
                     'alias' => $alias->getAliasEmail(),
@@ -79,12 +66,6 @@ final class EmailAliasExporter
         return $data;
     }
 
-    /**
-     * @param array $data
-     * @param string $filename
-     *
-     * @return string
-     */
     private function toCsv(array $data, string $filename): string
     {
         $file = fopen($filename, 'w+');
@@ -98,6 +79,7 @@ final class EmailAliasExporter
         }
 
         fclose($file);
+
         return $filename;
     }
 }

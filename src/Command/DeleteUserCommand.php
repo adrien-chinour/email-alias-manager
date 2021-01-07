@@ -11,7 +11,6 @@ use Symfony\Component\Console\Style\SymfonyStyle;
 
 final class DeleteUserCommand extends Command
 {
-
     private UserRepository $repository;
 
     public function __construct(UserRepository $repository, string $name = null)
@@ -39,13 +38,15 @@ final class DeleteUserCommand extends Command
         $username = $io->choice('User to delete', $users);
 
         $user = $this->repository->findOneBy(['uuid' => $username]);
-        if ($user === null) {
+        if (null === $user) {
             $io->warning('User not found.');
+
             return 1;
         }
 
         $this->repository->delete($user);
         $io->success("User '$username' removed.");
+
         return 0;
     }
 }
