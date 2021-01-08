@@ -19,15 +19,12 @@ final class ExportController extends AbstractController
 {
     /**
      * @Route("/", name="export_select")
-     *
-     * @return Response
      */
-    public function selection(AliasRepository $repository)
+    public function selection(AliasRepository $repository): Response
     {
-        return $this->render(
-            'export/select.html.twig',
-            ['aliases' => $repository->findAll()]
-        );
+        return $this->render('export/select.html.twig', [
+            'aliases' => $repository->findAll()
+        ]);
     }
 
     /**
@@ -43,7 +40,6 @@ final class ExportController extends AbstractController
 
         $filename = $exporter->getZipArchve(
             array_keys(array_filter($request->request->get('alias') ?? [], $checked)),
-            array_keys(array_filter($request->request->get('tags') ?? [], $checked))
         );
 
         if (!file_exists($filename)) {
@@ -51,6 +47,7 @@ final class ExportController extends AbstractController
 
             return $this->redirectToRoute('export_select');
         }
+
         $response = new BinaryFileResponse($filename);
         $response->headers->set('Content-Type', 'application/zip');
 

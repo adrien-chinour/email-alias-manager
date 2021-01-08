@@ -1,33 +1,62 @@
 {% extends 'base.html.twig' %}
 
-{% block stylesheets %}
-    {{ encore_entry_link_tags('dashboard') }}
-{% endblock %}
-
 {% block body %}
-    {% include '_components/navbar.html.twig' %}
 
-    {% for label, messages in app.flashes %}
-        {% for message in messages %}
-            <div class="alert alert-{{ label }} alert-dismissible fade show" role="alert">
-                <button type="button" class="close" data-dismiss="alert" aria-label="Close">
-                    <span aria-hidden="true">&times;</span>
-                </button>
-                {{ message }}
+    <nav class="navbar navbar-expand-lg navbar-dark bg-dark mb-4">
+        <div class="container-fluid">
+            <a class="navbar-brand atma" href="{{ path('alias_index') }}">{{ 'site.title' | trans }}</a>
+
+            <button class="navbar-toggler" type="button" data-mdb-toggle="collapse" data-mdb-target="#navbar-main"
+                    aria-controls="navbar-main" aria-expanded="false" aria-label="Toggle navigation">
+                <i class="fas fa-bars"></i>
+            </button>
+
+            <div class="collapse navbar-collapse" id="navbar-main">
+                <ul class="navbar-nav me-auto mb-2 mb-lg-0">
+                    <li class="nav-item {% if app.request.requestUri == path('alias_index') %}active{% endif %}">
+                        <a class="nav-link" href="{{ path('alias_index') }}">{{ 'My aliases' | trans }}</a>
+                    </li>
+                    <li class="nav-item {% if app.request.requestUri == path('sync_diff') %}active{% endif %}">
+                        <a class="nav-link" href="{{ path('sync_diff') }}">{{ 'Synchronisation' | trans }}</a>
+                    </li>
+                    <li class="nav-item {% if app.request.requestUri == path('export_select') %}active{% endif %}">
+                        <a class="nav-link "
+                           href="{{ path('export_select') }}">{{ 'Exporting aliases' | trans }}</a>
+                    </li>
+                </ul>
+
+                <form class="d-flex input-group input-group-sm w-auto" action="{{ path('search_alias') }}" method="get">
+                    <input type="search" name="alias" class="form-control" placeholder="{{ 'Search alias' | trans }}"
+                           aria-label="{{ 'Search alias' | trans }}"/>
+                    <button class="btn btn-primary" type="submit" data-mdb-ripple-color="primary">
+                        <i class="fas fa-search"></i>
+                    </button>
+                </form>
+
+                <a class="btn btn-outline-danger btn-sm ms-2" href="{{ path('app_logout') }}">
+                    <i class="fas fa-sign-out-alt"></i> {{ 'Logout' | trans }}
+                </a>
             </div>
+        </div>
+    </nav>
+
+    <div class="container">
+        {% for label, messages in app.flashes %}
+            {% for message in messages %}
+                <div class="alert alert-{{ label }} alert-dismissible fade show" role="alert">
+                    {{ message }}
+                    <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                </div>
+            {% endfor %}
         {% endfor %}
-    {% endfor %}
+    </div>
 
     <main class="container">
         <div class="card">
-            <div class="card-header bg-secondary text-white">
-                {% block content_title %}{% endblock %}
+            <div class="card-header bg-primary text-white text-center">
+                <strong>{% block content_title %}{% endblock %}</strong>
             </div>
             <div class="card-body">{% block content_body %}{% endblock %}</div>
         </div>
     </main>
-{% endblock %}
-
-{% block javascripts %}
-    {{ encore_entry_script_tags('dashboard') }}
 {% endblock %}

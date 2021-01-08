@@ -36,10 +36,9 @@ final class AliasController extends AbstractController
      */
     public function index(Request $request): Response
     {
-        return $this->render(
-            'alias/index.html.twig',
-            ['aliases' => $this->repository->paginate($request->query->getInt('page', 1))]
-        );
+        return $this->render('alias/index.html.twig', [
+            'aliases' => $this->repository->paginate($request->query->getInt('page', 1))
+        ]);
     }
 
     /**
@@ -65,31 +64,11 @@ final class AliasController extends AbstractController
     }
 
     /**
-     * @Route("/{id}/edit", name="alias_edit", methods={"GET","POST"})
-     */
-    public function edit(Request $request, Alias $alias): Response
-    {
-        $form = $this->createForm(AliasType::class, $alias, ['edition' => true]);
-        $form->handleRequest($request);
-
-        if ($form->isSubmitted() && $form->isValid()) {
-            $this->repository->save($alias);
-
-            return $this->redirectToRoute('alias_index');
-        }
-
-        return $this->render('alias/edit.html.twig', ['alias' => $alias, 'form' => $form->createView()]);
-    }
-
-    /**
      * @Route("/{id}", name="alias_delete", methods={"DELETE"})
      */
     public function delete(Request $request, Alias $alias): RedirectResponse
     {
-        if ($this->isCsrfTokenValid(
-            'delete'.$alias->getId(),
-            $request->request->get('_token')
-        )) {
+        if ($this->isCsrfTokenValid('delete' . $alias->getId(), $request->request->get('_token'))) {
             $this->api->deleteAlias($alias->getRealEmail(), $alias->getAliasEmail());
             $this->repository->delete($alias);
         }

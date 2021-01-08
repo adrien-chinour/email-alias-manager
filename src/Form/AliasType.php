@@ -27,36 +27,24 @@ final class AliasType extends AbstractType
 
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
-        if (!$options['edition']) {
-            $builder
-                ->add('realEmail', ChoiceType::class, [
-                    'label' => $this->translator->trans('Target'),
-                    'choices' => $this->api->getEmails(),
-                    'choice_label' => function ($value) {
-                        return $value;
-                    },
-                ])
-                ->add('aliasEmail', TextType::class, [
-                    'label' => $this->translator->trans('Alias'),
-                ])
-                ->addEventListener(FormEvents::SUBMIT, function (FormEvent $event) {
-                    /** @var Alias $alias */
-                    $alias = $event->getData();
-
-                    // update alias because domain not include in form
-                    $alias->setAliasEmail($alias->getAliasEmail().$alias->getDomain());
-                });
-        }
-
         $builder
-            ->add('tags', ChoiceType::class, [
-                'multiple' => true,
-                'expanded' => false,
-                'required' => false,
-                'attr' => ['class' => 'select2'],
-            ]);
+            ->add('realEmail', ChoiceType::class, [
+                'label' => $this->translator->trans('Target'),
+                'choices' => $this->api->getEmails(),
+                'choice_label' => function ($value) {
+                    return $value;
+                },
+            ])
+            ->add('aliasEmail', TextType::class, [
+                'label' => $this->translator->trans('Alias'),
+            ])
+            ->addEventListener(FormEvents::SUBMIT, function (FormEvent $event) {
+                /** @var Alias $alias */
+                $alias = $event->getData();
 
-        $builder->get('tags')->resetViewTransformers();
+                // update alias because domain not include in form
+                $alias->setAliasEmail($alias->getAliasEmail() . $alias->getDomain());
+            });
     }
 
     public function configureOptions(OptionsResolver $resolver)

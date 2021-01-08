@@ -3,24 +3,20 @@
 {% block title %}Gestion de mes alias{% endblock %}
 
 {% block content_title %}
-    <div class="row align-items-center">
-        <div class="col-8 text-white">
-            {{ "My aliases" | trans }}
-        </div>
-        <div class="col-4 text-right">
-            <a href="{{ path('alias_new') }}" class="btn btn-sm btn-success">{{ "Add new alias" | trans }}</a>
-        </div>
-    </div>
+    {{ "My aliases" | trans }}
 {% endblock %}
 
 {% block content_body %}
-    <div class="table-responsive mt-3">
+    <a class="btn btn-sm btn-success btn-block" href="{{ path('alias_new') }}">
+        {{ "Add new alias" | trans }}
+    </a>
+
+    <div class="table-responsive">
         <table class="table table-hover table-borderless text-center">
             <thead class="thead-dark">
             <tr>
                 <th>{{ "Target" | trans }}</th>
                 <th>{{ "Alias" | trans }}</th>
-                <th>{{ "Tags" | trans }}</th>
                 <th></th>
             </tr>
             </thead>
@@ -29,15 +25,13 @@
                 <tr>
                     <td>{{ alias.realEmail }}</td>
                     <td>{{ alias.aliasEmail }}</td>
-                    <td>
-                        {% for tag in alias.tags %}
-                            <span class="badge badge-pill badge-info">{{ tag }}</span>
-                        {% endfor %}
-                    </td>
                     <td class="text-right">
-                        <a class="btn btn-sm btn-secondary" href="{{ path('alias_edit', {'id': alias.id}) }}">
-                            <i class="fas fa-pen"></i>
-                        </a>
+                        <form method="post" action="{{ path('alias_delete', {'id': alias.id}) }}"
+                              onsubmit="return confirm('{{ 'Are you sure ?' | trans }}');">
+                            <input type="hidden" name="_method" value="DELETE">
+                            <input type="hidden" name="_token" value="{{ csrf_token('delete' ~ alias.id) }}">
+                            <button class="btn btn-danger"><i class="fas fa-trash"></i></button>
+                        </form>
                     </td>
                 </tr>
             {% else %}

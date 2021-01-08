@@ -5,7 +5,7 @@
 {% block content_body %}
     <ul class="list-group list-group-flush">
         {% if results is empty %}
-            <p>{{ "No result found" | trans }}</p>
+            <p class="text-center">{{ "No result found" | trans }}</p>
         {% endif %}
         {% for result in results %}
             <li class="list-group-item">

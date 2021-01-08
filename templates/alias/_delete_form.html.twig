@@ -1,6 +1,0 @@
-<form method="post" action="{{ path('alias_delete', {'id': alias.id}) }}"
-      onsubmit="return confirm('{{ 'Are you sure ?' | trans }}');">
-    <input type="hidden" name="_method" value="DELETE">
-    <input type="hidden" name="_token" value="{{ csrf_token('delete' ~ alias.id) }}">
-    <button class="btn btn-block btn-danger">{{ "Delete this alias" | trans }}</button>
-</form>

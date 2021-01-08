@@ -12,22 +12,9 @@ final class IndexController extends AbstractController
 {
     /**
      * @Route("/", name="app_index")
-     *
-     * @return RedirectResponse
      */
-    public function index()
+    public function index(): RedirectResponse
     {
         return $this->redirectToRoute('app_login');
-    }
-
-    /**
-     * @Route("/health-check", name="health_check")
-     *
-     * @return Response
-     */
-    public function health()
-    {
-        // return ellias as app for application mobile sync check
-        return new JsonResponse(['app' => 'ellias'], 200);
     }
 }

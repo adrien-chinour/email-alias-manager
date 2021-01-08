@@ -15,9 +15,9 @@ final class EmailAliasExporter
         $this->repository = $repository;
     }
 
-    public function getZipArchve(array $aliases, array $tags): string
+    public function getZipArchve(array $aliases): string
     {
-        $data = $this->process($aliases, $tags);
+        $data = $this->process($aliases);
 
         $zip = new ZipArchive();
         $filename = '/tmp/export.zip';
@@ -29,17 +29,12 @@ final class EmailAliasExporter
             $alias = $this->toCsv($data['alias'], '/tmp/alias.csv');
             $zip->addFromString(basename($alias), file_get_contents($alias));
         }
-
-        if (isset($data['tags'])) {
-            $tags = $this->toCsv($data['tags'], '/tmp/tags.csv');
-            $zip->addFromString(basename($tags), file_get_contents($tags));
-        }
         $zip->close();
 
         return $filename;
     }
 
-    private function process(array $aliases, array $tags): array
+    private function process(array $aliases): array
     {
         $data = [];
         foreach ($aliases as $id) {
@@ -50,16 +45,6 @@ final class EmailAliasExporter
                     'email' => $alias->getRealEmail(),
                     'alias' => $alias->getAliasEmail(),
                 ];
-            }
-
-            if (in_array($id, $tags)) {
-                foreach ($alias->getTags() as $tag) {
-                    $data['tags'][] = [
-                        'email' => $alias->getRealEmail(),
-                        'alias' => $alias->getAliasEmail(),
-                        'tag' => $tag,
-                    ];
-                }
             }
         }
 

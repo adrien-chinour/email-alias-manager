@@ -37,7 +37,7 @@ class PurgeAliasCommand extends Command
         $this->io = new SymfonyStyle($input, $output);
     }
 
-    protected function execute(InputInterface $input, OutputInterface $output)
+    protected function execute(InputInterface $input, OutputInterface $output): int
     {
         if (!$input->getOption('force')) {
             $validation = $this->io->confirm('This command will removed all aliases on current database. Sure ?');
