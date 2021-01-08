@@ -2,9 +2,9 @@
 
 namespace App\Provider\Gandi;
 
-use App\Exception\ApiCallException;
+use App\Provider\Exception\ApiCallException;
 use App\Provider\AliasApiInterface;
-use App\Service\EmailTools;
+use App\Provider\EmailUtils;
 use DateInterval;
 use InvalidArgumentException;
 use Psr\Log\LoggerInterface;
@@ -14,6 +14,8 @@ use Symfony\Contracts\HttpClient\HttpClientInterface;
 
 class GandiAliasApi implements AliasApiInterface
 {
+    use EmailUtils;
+
     private const ENV_API_KEY = 'GANDI_API_KEY';
 
     private const BASE_URL = 'https://api.gandi.net/v5';
@@ -153,7 +155,7 @@ class GandiAliasApi implements AliasApiInterface
             return $item->get();
         }
 
-        $domain = EmailTools::getDomain($email);
+        $domain = $this->getDomain($email);
         foreach ($this->getMailboxes($domain) as $mailbox) {
             if ($mailbox['address'] === $email) {
                 $mailbox = $this->request(
@@ -183,7 +185,7 @@ class GandiAliasApi implements AliasApiInterface
 
         $aliases = [];
         foreach ($mailbox['aliases'] as $alias) {
-            $aliases[] = $alias.'@'.EmailTools::getDomain($email);
+            $aliases[] = $alias.'@'.$this->getDomain($email);
         }
 
         return $aliases;
@@ -199,8 +201,8 @@ class GandiAliasApi implements AliasApiInterface
         $this->cache->delete(sprintf('mailbox.%s', md5($email)));
         $aliases = $mailbox['aliases'];
 
-        if (!array_search(EmailTools::withoutDomain($alias), $aliases)) {
-            $aliases[] = EmailTools::withoutDomain($alias);
+        if (!array_search($this->withoutDomain($alias), $aliases)) {
+            $aliases[] = $this->withoutDomain($alias);
             $this->updateMailboxAlias(array_values($aliases), $mailbox);
         }
 
@@ -217,7 +219,7 @@ class GandiAliasApi implements AliasApiInterface
         $this->cache->delete(sprintf('mailbox.%s', md5($email)));
         $aliases = $mailbox['aliases'];
 
-        if (($key = array_search(EmailTools::withoutDomain($alias), $aliases)) !== false) {
+        if (($key = array_search($this->withoutDomain($alias), $aliases)) !== false) {
             unset($aliases[$key]);
             $this->updateMailboxAlias(array_values($aliases), $mailbox);
         }

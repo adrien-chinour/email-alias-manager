@@ -6,9 +6,6 @@ use App\Repository\AliasRepository;
 use Symfony\Component\HttpKernel\Exception\HttpException;
 use ZipArchive;
 
-/**
- * @deprecated
- */
 final class EmailAliasExporter
 {
     private AliasRepository $repository;

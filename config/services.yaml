@@ -1,6 +1,6 @@
 services:
     _defaults:
-        autowire: truew
+        autowire: true
         autoconfigure: true
 
     # Define namespace for DI
