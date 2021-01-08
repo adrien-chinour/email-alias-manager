@@ -1,9 +1,8 @@
 <?php
 
-namespace App\Service;
+namespace App\Provider;
 
 use Psr\Log\LoggerInterface;
-use Throwable;
 
 class AliasApiLoggerDecorator implements AliasApiInterface
 {
@@ -21,7 +20,7 @@ class AliasApiLoggerDecorator implements AliasApiInterface
     }
 
     /**
-     * @throws Throwable
+     * @throws \Throwable
      */
     public function getEmails(): array
     {
@@ -30,7 +29,7 @@ class AliasApiLoggerDecorator implements AliasApiInterface
             $this->apiLogger->debug(
                 sprintf('Call %s::getEmails() return %s', $this->className, json_encode($emails))
             );
-        } catch (Throwable $exception) {
+        } catch (\Throwable $exception) {
             $this->apiLogger->error(
                 sprintf('Call %s::getEmails() return error : %s', $this->className, $exception->getMessage())
             );
@@ -41,7 +40,7 @@ class AliasApiLoggerDecorator implements AliasApiInterface
     }
 
     /**
-     * @throws Throwable
+     * @throws \Throwable
      */
     public function getAlias(string $email): array
     {
@@ -50,7 +49,7 @@ class AliasApiLoggerDecorator implements AliasApiInterface
             $this->apiLogger->debug(
                 sprintf('Call %s::getAlias(%s) return %s', $this->className, $email, json_encode($aliases))
             );
-        } catch (Throwable $exception) {
+        } catch (\Throwable $exception) {
             $this->apiLogger->error(
                 sprintf('Call %s::getAlias(%s) return error : %s', $this->className, $email, $exception->getMessage())
             );
@@ -61,7 +60,7 @@ class AliasApiLoggerDecorator implements AliasApiInterface
     }
 
     /**
-     * @throws Throwable
+     * @throws \Throwable
      */
     public function addAlias(string $email, string $alias): bool
     {
@@ -70,7 +69,7 @@ class AliasApiLoggerDecorator implements AliasApiInterface
             $this->apiLogger->debug(
                 sprintf('Call %s::addAlias(%s,%s) return %s', $this->className, $email, $alias, $bool)
             );
-        } catch (Throwable $exception) {
+        } catch (\Throwable $exception) {
             $this->apiLogger->error(
                 sprintf('Call %s::addAlias(%s,%s) return error : %s', $this->className, $email, $alias, $exception->getMessage())
             );
@@ -81,7 +80,7 @@ class AliasApiLoggerDecorator implements AliasApiInterface
     }
 
     /**
-     * @throws Throwable
+     * @throws \Throwable
      */
     public function deleteAlias(string $email, string $alias): bool
     {
@@ -90,7 +89,7 @@ class AliasApiLoggerDecorator implements AliasApiInterface
             $this->apiLogger->debug(
                 sprintf('Call %s::deleteAlias(%s,%s) return %s', $this->className, $email, $alias, $bool)
             );
-        } catch (Throwable $exception) {
+        } catch (\Throwable $exception) {
             $this->apiLogger->error(
                 sprintf('Call %s::deleteAlias(%s,%s) return error : %s', $this->className, $email, $alias, $exception->getMessage())
             );

@@ -4,7 +4,7 @@ namespace App\DataPersister;
 
 use ApiPlatform\Core\DataPersister\ContextAwareDataPersisterInterface;
 use App\Entity\Alias;
-use App\Service\AliasApiInterface;
+use App\Provider\AliasApiInterface;
 
 final class AliasDataPersister implements ContextAwareDataPersisterInterface
 {

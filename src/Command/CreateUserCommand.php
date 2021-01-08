@@ -12,9 +12,9 @@ use Symfony\Component\Security\Core\Encoder\UserPasswordEncoderInterface;
 
 final class CreateUserCommand extends Command
 {
-    private $encoder;
+    private UserPasswordEncoderInterface $encoder;
 
-    private $repository;
+    private UserRepository $repository;
 
     public function __construct(UserPasswordEncoderInterface $encoder, UserRepository $repository, string $name = null)
     {

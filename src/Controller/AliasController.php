@@ -4,8 +4,8 @@ namespace App\Controller;
 
 use App\Entity\Alias;
 use App\Form\AliasType;
+use App\Provider\AliasApiInterface;
 use App\Repository\AliasRepository;
-use App\Service\AliasApiInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Request;
@@ -36,8 +36,11 @@ final class AliasController extends AbstractController
      */
     public function index(Request $request): Response
     {
+        $pagination = $this->repository->paginate($request->query->getInt('page', 1));
+        $pagination->setCustomParameters(['align' => 'center']);
+
         return $this->render('alias/index.html.twig', [
-            'aliases' => $this->repository->paginate($request->query->getInt('page', 1))
+            'aliases' => $pagination
         ]);
     }
 

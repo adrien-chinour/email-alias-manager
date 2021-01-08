@@ -2,7 +2,7 @@
 
 namespace App\Provider\Ovh;
 
-use App\Service\AliasApiInterface;
+use App\Provider\AliasApiInterface;
 use GuzzleHttp\Exception\ClientException;
 use InvalidArgumentException;
 use Ovh\Api;

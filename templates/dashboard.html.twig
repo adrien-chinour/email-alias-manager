@@ -19,10 +19,6 @@
                     <li class="nav-item {% if app.request.requestUri == path('sync_diff') %}active{% endif %}">
                         <a class="nav-link" href="{{ path('sync_diff') }}">{{ 'Synchronisation' | trans }}</a>
                     </li>
-                    <li class="nav-item {% if app.request.requestUri == path('export_select') %}active{% endif %}">
-                        <a class="nav-link "
-                           href="{{ path('export_select') }}">{{ 'Exporting aliases' | trans }}</a>
-                    </li>
                 </ul>
 
                 <form class="d-flex input-group input-group-sm w-auto" action="{{ path('search_alias') }}" method="get">

@@ -26,11 +26,6 @@ class Alias
      */
     private ?string $aliasEmail = null;
 
-    /**
-     * @ORM\Column(type="array")
-     */
-    private array $tags = [];
-
     public function getId(): ?int
     {
         return $this->id;
@@ -60,18 +55,6 @@ class Alias
         return $this;
     }
 
-    public function getTags(): ?array
-    {
-        return $this->tags;
-    }
-
-    public function setTags(array $tags): self
-    {
-        $this->tags = $tags;
-
-        return $this;
-    }
-
     public function __toString(): string
     {
         return $this->aliasEmail;
@@ -80,10 +63,7 @@ class Alias
     public function getDomain(): string
     {
         $email = explode('@', $this->realEmail);
-        if (count($email) < 2) {
-            return '';
-        }
 
-        return "@$email[1]";
+        return count($email) < 2 ? '' : "@$email[1]";
     }
 }

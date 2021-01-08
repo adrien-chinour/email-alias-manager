@@ -15,19 +15,14 @@ final class SecurityController extends AbstractController
      */
     public function login(AuthenticationUtils $authenticationUtils): Response
     {
-        // get the login error if there is one
-        $error = $authenticationUtils->getLastAuthenticationError();
-        // last username entered by the user
-        $lastUsername = $authenticationUtils->getLastUsername();
-
         if ($this->isGranted('IS_AUTHENTICATED_FULLY')) {
             return $this->redirectToRoute('alias_new');
         }
 
-        return $this->render(
-            'security/login.html.twig',
-            ['last_username' => $lastUsername, 'error' => $error]
-        );
+        return $this->render('security/login.html.twig', [
+            'last_username' => $authenticationUtils->getLastUsername(),
+            'error' => $authenticationUtils->getLastAuthenticationError()
+        ]);
     }
 
     /**

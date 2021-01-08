@@ -18,10 +18,10 @@ final class SearchController extends AbstractController
      */
     public function alias(Request $request, AliasRepository $repository): Response
     {
-        $search = $request->query->get('alias', '');
+        $search = $request->query->get('alias');
 
         return $this->render('search/alias.html.twig', [
-            'results' => $repository->search($search),
+            'results' => $search ? $repository->search($search) : [],
             'search' => $search
         ]);
     }

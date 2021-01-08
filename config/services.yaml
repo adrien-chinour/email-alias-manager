@@ -12,11 +12,11 @@ services:
         tags: [ 'controller.service_arguments' ]
 
     # Define used provider
-    App\Service\AliasApiInterface: '@App\Provider\Fake\FakeAliasApi'
+    App\Provider\AliasApiInterface: '@App\Provider\Fake\FakeAliasApi'
 
     # Logger decorator for api call
-    App\Service\AliasApiLoggerDecorator:
-        decorates: 'App\Service\AliasApiInterface'
+    App\Provider\AliasApiLoggerDecorator:
+        decorates: 'App\Provider\AliasApiInterface'
 
     ### API Platform configuration
 

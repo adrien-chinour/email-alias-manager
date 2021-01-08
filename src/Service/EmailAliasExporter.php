@@ -6,6 +6,9 @@ use App\Repository\AliasRepository;
 use Symfony\Component\HttpKernel\Exception\HttpException;
 use ZipArchive;
 
+/**
+ * @deprecated
+ */
 final class EmailAliasExporter
 {
     private AliasRepository $repository;
@@ -57,12 +60,8 @@ final class EmailAliasExporter
 
         fputcsv($file, array_keys($data[0]));
         foreach ($data as $line) {
-            fputcsv(
-                $file,
-                $line
-            );
+            fputcsv($file, $line);
         }
-
         fclose($file);
 
         return $filename;

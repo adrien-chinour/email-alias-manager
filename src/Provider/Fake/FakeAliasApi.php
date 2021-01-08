@@ -4,7 +4,7 @@ namespace App\Provider\Fake;
 
 use App\Provider\Fake\Models\Alias;
 use App\Provider\Fake\Models\Email;
-use App\Service\AliasApiInterface;
+use App\Provider\AliasApiInterface;
 
 class FakeAliasApi implements AliasApiInterface
 {

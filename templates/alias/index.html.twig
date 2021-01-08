@@ -15,16 +15,16 @@
         <table class="table table-hover table-borderless text-center">
             <thead class="thead-dark">
             <tr>
-                <th>{{ "Target" | trans }}</th>
                 <th>{{ "Alias" | trans }}</th>
+                <th>{{ "Target" | trans }}</th>
                 <th></th>
             </tr>
             </thead>
             <tbody>
             {% for alias in aliases %}
                 <tr>
-                    <td>{{ alias.realEmail }}</td>
                     <td>{{ alias.aliasEmail }}</td>
+                    <td>{{ alias.realEmail }}</td>
                     <td class="text-right">
                         <form method="post" action="{{ path('alias_delete', {'id': alias.id}) }}"
                               onsubmit="return confirm('{{ 'Are you sure ?' | trans }}');">

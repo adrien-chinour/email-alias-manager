@@ -4,10 +4,11 @@ namespace App\Controller;
 
 use App\Entity\Alias;
 use App\Repository\AliasRepository;
-use App\Service\AliasApiInterface;
+use App\Provider\AliasApiInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Request;
+use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
 
 /**
@@ -26,17 +27,9 @@ final class SyncController extends AbstractController
     }
 
     /**
-     * @Route("/", name="sync_index")
-     */
-    public function index()
-    {
-        return $this->redirectToRoute('sync_diff');
-    }
-
-    /**
      * @Route("/diff", name="sync_diff")
      */
-    public function diff()
+    public function diff(): Response
     {
         $diff = [];
         foreach ($this->api->getEmails() as $email) {
@@ -69,10 +62,8 @@ final class SyncController extends AbstractController
 
     /**
      * @Route("/add", name="sync_add", methods={"POST"})
-     *
-     * @return RedirectResponse
      */
-    public function add(Request $request)
+    public function add(Request $request): RedirectResponse
     {
         $aliases = $request->request->get('alias');
         $emails = $request->request->get('email');

@@ -3,7 +3,7 @@
 namespace App\Provider\Gandi;
 
 use App\Exception\ApiCallException;
-use App\Service\AliasApiInterface;
+use App\Provider\AliasApiInterface;
 use App\Service\EmailTools;
 use DateInterval;
 use InvalidArgumentException;
@@ -11,7 +11,6 @@ use Psr\Log\LoggerInterface;
 use Symfony\Component\Cache\Adapter\FilesystemAdapter;
 use Symfony\Component\HttpKernel\Exception\HttpException;
 use Symfony\Contracts\HttpClient\HttpClientInterface;
-use Throwable;
 
 class GandiAliasApi implements AliasApiInterface
 {
@@ -56,7 +55,7 @@ class GandiAliasApi implements AliasApiInterface
                 throw new HttpException($response->getStatusCode(), $response->getContent());
             }
             $content = json_decode($response->getContent(), true);
-        } catch (Throwable $exception) {
+        } catch (\Throwable $exception) {
             throw new ApiCallException('Gandi', sprintf('%s : %s with options: %s', $method, $url, json_encode($options)), $exception->getMessage());
         }
 
@@ -69,7 +68,7 @@ class GandiAliasApi implements AliasApiInterface
      * @throws ApiCallException
      * @throws \Psr\Cache\InvalidArgumentException
      */
-    private function getDomains()
+    private function getDomains(): array
     {
         $item = $this->cache->getItem('domains');
         if ($item->isHit()) {

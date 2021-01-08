@@ -4,37 +4,39 @@
 
 {% block content_body %}
     <form action="{{ path('export_csv') }}" method="post">
-        <table class="table table-hover table-borderless text-center" data-controller="export">
-            <thead class="thead-dark">
-            <tr>
-                <th class="align-middle">{{ "Email" | trans }}</th>
-                <th class="align-middle">{{ "Alias" | trans }}</th>
-                <th>
-                    {{ "Export aliases" | trans }}
-                    <label class="switch">
-                        <input type="checkbox" class="custom-control-input all-alias"
-                               id="select-all-alias" checked>
-                        <span class="slider round"></span>
-                    </label>
-                </th>
-            </tr>
-            </thead>
-            <tbody>
-            {% for alias in aliases %}
+        <div class="table-responsive">
+            <table class="table table-hover table-borderless text-center" data-controller="export">
+                <thead class="thead-dark">
                 <tr>
-                    <td>{{ alias.realEmail }}</td>
-                    <td>{{ alias.aliasEmail }}</td>
-                    <td>
-                        <label class="switch">
-                            <input type="checkbox" class="custom-control-input checkbox-alias"
-                                   name="alias[{{ alias.id }}]" checked>
-                            <span class="slider round"></span>
-                        </label>
-                    </td>
+                    <th class="align-middle">{{ "Email" | trans }}</th>
+                    <th class="align-middle">{{ "Alias" | trans }}</th>
+                    <th>
+                        <div class="form-check form-switch">
+                            <label class="form-check-label" for="select-all-alias">
+                                {{ "Export aliases" | trans }}
+                            </label>
+                            <input type="checkbox" class="form-check-input" id="select-all-alias" checked>
+                        </div>
+                    </th>
                 </tr>
-            {% endfor %}
-            </tbody>
-        </table>
+                </thead>
+                <tbody>
+                {% for alias in aliases %}
+                    <tr>
+                        <td>{{ alias.realEmail }}</td>
+                        <td>{{ alias.aliasEmail }}</td>
+                        <td>
+                            <div class="form-check form-switch">
+                                <input type="checkbox" class="form-check-input" id="alias[{{ alias.id }}]"
+                                       name="alias[{{ alias.id }}]" checked>
+                                <label class="form-check-label visually-hidden" for="alias[{{ alias.id }}]"></label>
+                            </div>
+                        </td>
+                    </tr>
+                {% endfor %}
+                </tbody>
+            </table>
+        </div>
         <button type="submit" class="btn btn-block btn-success">{{ "Export" | trans }}</button>
     </form>
 {% endblock %}
