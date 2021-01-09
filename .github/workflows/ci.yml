@@ -14,8 +14,11 @@ jobs:
             -   name: Install dependencies
                 run: composer install --prefer-dist --no-progress --no-suggest
 
-            -   name: Detecting PHP Code Standards Violations
+            -   name: PHP Code Standards Violations Analysis
                 run: composer run-script phpcs
+
+            -   name: PHP Static Analysis
+                run: composer run-script phpstan
 
             -   name: Run test suite
                 run: composer run-script test

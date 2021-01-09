@@ -7,9 +7,29 @@
 {% endblock %}
 
 {% block content_body %}
-    <a class="btn btn-sm btn-success btn-block" href="{{ path('alias_new') }}">
-        {{ "Add new alias" | trans }}
-    </a>
+    <nav class="navbar navbar-light bg-light">
+        <div class="container-fluid">
+
+            <form class="d-flex input-group input-group-sm w-auto" action="{{ path('search_alias') }}" method="get">
+                <input type="search" name="alias" class="form-control" placeholder="{{ 'Search alias' | trans }}"
+                       aria-label="{{ 'Search alias' | trans }}"/>
+                <button class="btn btn-primary" type="submit" data-mdb-ripple-color="primary">
+                    <i class="fas fa-search"></i>
+                </button>
+            </form>
+
+            <a class="btn btn-sm btn-success" href="{{ path('alias_new') }}">{{ "Add new alias" | trans }}</a>
+
+            <form class="d-flex input-group input-group-sm w-auto" action="{{ path('alias_export') }}" method="get">
+                <select name="format" class="form-select">
+                    <option value="csv" selected>csv</option>
+                    <option value="json">json</option>
+                    <option value="xml">xml</option>
+                </select>
+                <button class="btn btn-outline-primary" type="submit">Export</button>
+            </form>
+        </div>
+    </nav>
 
     <div class="table-responsive">
         <table class="table table-hover table-borderless text-center">

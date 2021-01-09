@@ -21,14 +21,6 @@
                     </li>
                 </ul>
 
-                <form class="d-flex input-group input-group-sm w-auto" action="{{ path('search_alias') }}" method="get">
-                    <input type="search" name="alias" class="form-control" placeholder="{{ 'Search alias' | trans }}"
-                           aria-label="{{ 'Search alias' | trans }}"/>
-                    <button class="btn btn-primary" type="submit" data-mdb-ripple-color="primary">
-                        <i class="fas fa-search"></i>
-                    </button>
-                </form>
-
                 <a class="btn btn-outline-danger btn-sm ms-2" href="{{ path('app_logout') }}">
                     <i class="fas fa-sign-out-alt"></i> {{ 'Logout' | trans }}
                 </a>
