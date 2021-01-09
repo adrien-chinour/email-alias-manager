@@ -69,6 +69,8 @@ Encore
         //pattern: /\.(png|jpg|jpeg)$/
     })
 
+    .copyFiles({from: './assets/favicon'})
+
     // enables Sass/SCSS support
     //.enableSassLoader()
 

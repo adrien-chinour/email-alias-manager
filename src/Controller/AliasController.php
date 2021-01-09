@@ -61,7 +61,7 @@ final class AliasController extends AbstractController
 
             $this->repository->save($alias);
             $this->api->addAlias($alias->getRealEmail(), $alias->getAliasEmail());
-            $this->addFlash('success', $this->translator->trans('Alias added !')); // TODO translate
+            $this->addFlash('success', $this->translator->trans('Alias added !'));
 
             return $this->redirectToRoute('alias_index');
         }
