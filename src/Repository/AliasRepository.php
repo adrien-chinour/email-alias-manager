@@ -3,6 +3,8 @@
 namespace App\Repository;
 
 use App\Entity\Alias;
+use Doctrine\ORM\Query;
+use Doctrine\ORM\QueryBuilder;
 use Doctrine\Persistence\ManagerRegistry;
 use Knp\Component\Pager\Pagination\PaginationInterface;
 use Knp\Component\Pager\PaginatorInterface;
@@ -34,20 +36,24 @@ class AliasRepository extends AbstractEntityRepository
 
     public function search(string $search): array
     {
-        $result = $this
-            ->createQueryBuilder('e')
-            ->where('e.aliasEmail LIKE :search')
-            ->setParameter('search', "%$search%")
-            ->getQuery()
-            ->getResult();
+        $result = $this->searchQuery($search)->getResult();
 
         return $result ?? [];
     }
 
-    public function paginate(int $page): PaginationInterface
+    public function paginate(int $page, ?string $search = null): PaginationInterface
     {
-        $query = $this->createQueryBuilder('e')->getQuery();
+        $query = null !== $search ? $this->searchQuery($search) : $this->createQueryBuilder('e')->getQuery();
 
         return $this->pagination->paginate($query, $page, self::MAX_ITEM_PER_PAGE);
+    }
+
+    protected function searchQuery(string $search): Query
+    {
+        return $this
+            ->createQueryBuilder('e')
+            ->where('e.aliasEmail LIKE :search')
+            ->setParameter('search', "%$search%")
+            ->getQuery();
     }
 }

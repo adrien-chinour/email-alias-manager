@@ -9,10 +9,9 @@
 {% block content_body %}
     <nav class="navbar navbar-light bg-light">
         <div class="container-fluid">
-
-            <form class="d-flex input-group input-group-sm w-auto" action="{{ path('search_alias') }}" method="get">
-                <input type="search" name="alias" class="form-control" placeholder="{{ 'Search alias' | trans }}"
-                       aria-label="{{ 'Search alias' | trans }}"/>
+            <form class="d-flex input-group input-group-sm w-auto" action="{{ path('alias_index') }}" method="get">
+                <input type="search" name="search" class="form-control" placeholder="{{ 'Search alias' | trans }}"
+                       aria-label="{{ 'Search alias' | trans }}" value="{{ search }}"/>
                 <button class="btn btn-primary" type="submit" data-mdb-ripple-color="primary">
                     <i class="fas fa-search"></i>
                 </button>

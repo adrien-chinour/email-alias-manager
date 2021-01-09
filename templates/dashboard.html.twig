@@ -13,11 +13,13 @@
 
             <div class="collapse navbar-collapse" id="navbar-main">
                 <ul class="navbar-nav me-auto mb-2 mb-lg-0">
-                    <li class="nav-item {% if app.request.requestUri == path('alias_index') %}active{% endif %}">
-                        <a class="nav-link" href="{{ path('alias_index') }}">{{ 'My aliases' | trans }}</a>
+                    <li class="nav-item">
+                        <a class="nav-link {% if app.request.pathInfo == path('alias_index') %}active{% endif %}"
+                           href="{{ path('alias_index') }}">{{ 'My aliases' | trans }}</a>
                     </li>
-                    <li class="nav-item {% if app.request.requestUri == path('sync_diff') %}active{% endif %}">
-                        <a class="nav-link" href="{{ path('sync_diff') }}">{{ 'Synchronisation' | trans }}</a>
+                    <li class="nav-item">
+                        <a class="nav-link {% if app.request.pathInfo == path('sync_diff') %}active{% endif %}"
+                           href="{{ path('sync_diff') }}">{{ 'Synchronisation' | trans }}</a>
                     </li>
                 </ul>
 

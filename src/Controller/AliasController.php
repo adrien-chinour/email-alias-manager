@@ -36,11 +36,14 @@ final class AliasController extends AbstractController
      */
     public function index(Request $request): Response
     {
-        $pagination = $this->repository->paginate($request->query->getInt('page', 1));
+        $search = $request->query->get('search');
+
+        $pagination = $this->repository->paginate($request->query->getInt('page', 1), $search);
         $pagination->setCustomParameters(['align' => 'center']);
 
         return $this->render('alias/index.html.twig', [
-            'aliases' => $pagination
+            'aliases' => $pagination,
+            'search' => $search
         ]);
     }
 
@@ -58,7 +61,7 @@ final class AliasController extends AbstractController
 
             $this->repository->save($alias);
             $this->api->addAlias($alias->getRealEmail(), $alias->getAliasEmail());
-            $this->addFlash('success', 'Alias ajouté !');
+            $this->addFlash('success', $this->translator->trans('Alias added !')); // TODO translate
 
             return $this->redirectToRoute('alias_index');
         }

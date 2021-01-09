@@ -31,7 +31,7 @@ final class EmailAliasExporter
     private function serialize(string $format): string
     {
         if (!in_array($format, ['csv', 'json', 'xml'])) {
-            throw new \InvalidArgumentException(sprintf("'%s' is not a valid format. Authorized format are : %s", $format, implode(', ', ['csv', 'json', 'xml'])));
+            throw new \InvalidArgumentException(sprintf("'%s' is not a valid format. Authorized format are : [%s]", $format, implode(', ', ['csv', 'json', 'xml'])));
         }
         $serializer = new Serializer([new ObjectNormalizer()], [new XmlEncoder(), new JsonEncoder(), new CsvEncoder()]);
 
