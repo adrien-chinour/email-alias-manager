@@ -2,13 +2,15 @@
 
 namespace App\Controller;
 
-use App\Entity\Alias;
-use App\Repository\AliasRepository;
-use App\Provider\AliasApiInterface;
+use App\Mercure\MercureNotifier;
+use App\Mercure\Notification;
+use App\Messenger\Message\AliasChangeMessage;
+use App\Messenger\Message\AliasSyncingMessage;
+use App\Repository\AliasDiffRepository;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
-use Symfony\Component\HttpFoundation\RedirectResponse;
-use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
+use Symfony\Component\Messenger\MessageBusInterface;
+use Symfony\Component\Messenger\Stamp\DelayStamp;
 use Symfony\Component\Routing\Annotation\Route;
 
 /**
@@ -16,78 +18,40 @@ use Symfony\Component\Routing\Annotation\Route;
  */
 final class SyncController extends AbstractController
 {
-    private AliasApiInterface $api;
+    private AliasDiffRepository $repository;
 
-    private AliasRepository $repository;
-
-    public function __construct(AliasApiInterface $api, AliasRepository $repository)
+    public function __construct(AliasDiffRepository $repository)
     {
-        $this->api = $api;
         $this->repository = $repository;
     }
 
     /**
-     * @Route("/diff", name="sync_diff")
+     * @Route("/", name="sync_index")
      */
-    public function diff(): Response
+    public function index(): Response
     {
-        $diff = [];
-        foreach ($this->api->getEmails() as $email) {
-            $local = $this->repository->getAlias($email);
-            $distant = $this->api->getAlias($email);
-
-            $local = array_map(function (Alias $alias) {
-                return $alias->getAliasEmail();
-            }, $local);
-
-            foreach (array_diff($distant, $local) as $alias) {
-                $diff[] = [
-                    'email' => $email,
-                    'alias' => $alias,
-                    'exist' => 'distant',
-                ];
-            }
-
-            foreach (array_diff($local, $distant) as $alias) {
-                $diff[] = [
-                    'email' => $email,
-                    'alias' => $alias,
-                    'exist' => 'local',
-                ];
-            }
-        }
-
-        return $this->render('sync/diff.html.twig', ['diff' => $diff]);
+        return $this->render('sync/index.html.twig', ['diff' => $this->repository->findAll()]);
     }
 
     /**
-     * @Route("/add", name="sync_add", methods={"POST"})
+     * @Route("/change", name="sync_change")
      */
-    public function add(Request $request): RedirectResponse
+    public function change(MessageBusInterface $bus, MercureNotifier $notifier): Response
     {
-        $aliases = $request->request->get('alias');
-        $emails = $request->request->get('email');
-        $exists = $request->request->get('exist');
+        $notifier->send(new Notification('warning', 'Send your message to worker'));
+        $bus->dispatch(new AliasChangeMessage(), [new DelayStamp(5000),]);
 
-        if (empty($aliases)) {
-            $this->addFlash('warning', 'Aucun alias à synchroniser');
+        return new Response("ok");
+    }
 
-            return $this->redirectToRoute('sync_diff');
-        }
+    /**
+     * @Route("/syncing", name="sync_syncing")
+     */
+    public function sync(MessageBusInterface $bus, MercureNotifier $notifier): Response
+    {
+        $notifier->send(new Notification('warning', 'Send your message to worker'));
+        $bus->dispatch(new AliasSyncingMessage());
 
-        foreach ($aliases as $key => $alias) {
-            if ('local' === $exists[$key]) {
-                $this->api->addAlias($emails[$key], $alias);
-            } else {
-                $email = (new Alias())
-                    ->setRealEmail($emails[$key])
-                    ->setAliasEmail($alias);
-                $this->repository->save($email);
-            }
-        }
-
-        $this->addFlash('success', 'Synchronisation terminée');
-
-        return $this->redirectToRoute('sync_diff');
+        return new Response("ok");
     }
 }

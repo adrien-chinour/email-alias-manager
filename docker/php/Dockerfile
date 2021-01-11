@@ -22,6 +22,7 @@ RUN apt-get update && apt-get install -y --no-install-recommends \
     zip \
     unzip \
     libzip-dev \
+    librabbitmq-dev \
     sqlite3 \
     libsqlite3-dev; \
     \
@@ -34,6 +35,12 @@ RUN cp /usr/local/etc/php/php.ini-production /usr/local/etc/php/php.ini; \
 
 RUN docker-php-ext-configure intl; \
 	docker-php-ext-install zip intl gd
+
+RUN pecl install redis \
+  && docker-php-ext-enable redis
+
+RUN pecl install amqp \
+  && docker-php-ext-enable amqp
 
 COPY --from=composer:latest /usr/bin/composer /usr/bin/composer
 ENV PATH="${PATH}:/root/.composer/vendor/bin"

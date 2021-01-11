@@ -19,7 +19,7 @@ use Knp\Component\Pager\PaginatorInterface;
  */
 class AliasRepository extends AbstractEntityRepository
 {
-    private const MAX_ITEM_PER_PAGE = 2;
+    private const MAX_ITEM_PER_PAGE = 8;
 
     private PaginatorInterface $pagination;
 

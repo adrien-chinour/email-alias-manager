@@ -12,13 +12,11 @@ services:
         tags: [ 'controller.service_arguments' ]
 
     # Define used provider
-    App\Provider\AliasApiInterface: '@App\Provider\Fake\FakeAliasApi'
+    App\Provider\AliasApiInterface: '@App\Provider\Gandi\GandiAliasApi'
 
     # Logger decorator for api call
     App\Provider\AliasApiLoggerDecorator:
         decorates: 'App\Provider\AliasApiInterface'
-
-    ### API Platform configuration
 
     App\DataPersister\AliasDataPersister:
         decorates: 'api_platform.doctrine.orm.data_persister'

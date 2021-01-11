@@ -1,52 +1,69 @@
 {% extends 'base.html.twig' %}
 
 {% block body %}
-
-    <nav class="navbar navbar-expand-lg navbar-dark bg-dark mb-4">
+    <header class="navbar navbar-dark bg-dark">
         <div class="container-fluid">
-            <a class="navbar-brand atma" href="{{ path('alias_index') }}">{{ 'site.title' | trans }}</a>
+            <a class="navbar-brand atma" href="{{ path('alias_index') }}">
+                {{ 'site.title' | trans }}
+            </a>
+            <a class="btn btn-outline-danger btn-sm ms-auto" href="{{ path('app_logout') }}">
+                <i class="fas fa-sign-out-alt"></i> {{ 'Logout' | trans }}
+            </a>
+        </div>
+    </header>
 
-            <button class="navbar-toggler" type="button" data-mdb-toggle="collapse" data-mdb-target="#navbar-main"
-                    aria-controls="navbar-main" aria-expanded="false" aria-label="Toggle navigation">
-                <i class="fas fa-bars"></i>
-            </button>
-
-            <div class="collapse navbar-collapse" id="navbar-main">
-                <ul class="navbar-nav me-auto mb-2 mb-lg-0">
-                    <li class="nav-item">
-                        <a class="nav-link {% if app.request.pathInfo == path('alias_index') %}active{% endif %}"
-                           href="{{ path('alias_index') }}">{{ 'My aliases' | trans }}</a>
-                    </li>
-                    <li class="nav-item">
-                        <a class="nav-link {% if app.request.pathInfo == path('sync_diff') %}active{% endif %}"
-                           href="{{ path('sync_diff') }}">{{ 'Synchronisation' | trans }}</a>
-                    </li>
-                </ul>
-
-                <a class="btn btn-outline-danger btn-sm ms-2" href="{{ path('app_logout') }}">
-                    <i class="fas fa-sign-out-alt"></i> {{ 'Logout' | trans }}
-                </a>
-            </div>
+    <nav class="navbar navbar-dark bg-warning p-0 visually-hidden">
+        <div class="container-fluid justify-content-center">
+            <span class="spinner-grow spinner-grow-sm text-light me-2" role="status" aria-hidden="true"></span>
+            <span class="text-light">Loading...</span>
         </div>
     </nav>
 
-    <div class="container">
-        {% for label, messages in app.flashes %}
-            {% for message in messages %}
-                <div class="alert alert-{{ label }} alert-dismissible fade show" role="alert">
-                    {{ message }}
-                    <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
-                </div>
+    <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
+        <div class="container-fluid justify-content-center">
+            <a class="btn btn-primary btn-sm {% if app.request.pathInfo == path('alias_index') %}disabled{% endif %}"
+               href="{{ path('alias_index') }}">
+                {{ 'My aliases' | trans }}
+            </a>
+            <a class="ms-2 btn btn-primary btn-sm {% if app.request.pathInfo == path('sync_index') %}disabled{% endif %}"
+               href="{{ path('sync_index') }}">
+                {{ 'Synchronisation' | trans }}
+            </a>
+        </div>
+    </nav>
+
+    {# Flash message with toast components (stackable) #}
+    <div aria-live="polite" aria-atomic="true" class="fixed-bottom" data-controller="mercure">
+        <div id="toast-container" class="toast-container position-absolute bottom-0 start-0 p-3" style="z-index: 999">
+
+            {# prototype to create a new toast from JS #}
+            <div id="toast-prototype" class="toast visually-hidden d-flex align-items-center text-white border-0"
+                 role="alert"
+                 aria-live="assertive" aria-atomic="true">
+                <div class="toast-body"></div>
+                <button type="button" class="btn-close btn-close-white ms-auto me-2" data-bs-dismiss="toast"
+                        aria-label="Close"></button>
+            </div>
+
+            {% for label, messages in app.flashes %}
+                {% for message in messages %}
+                    <div class="toast d-flex align-items-center text-white bg-{{ label }} border-0" role="alert"
+                         aria-live="assertive" aria-atomic="true">
+                        <div class="toast-body">{{ message }}</div>
+                        <button type="button" class="btn-close btn-close-white ms-auto me-2" data-bs-dismiss="toast"
+                                aria-label="Close"></button>
+                    </div>
+                {% endfor %}
             {% endfor %}
-        {% endfor %}
+        </div>
     </div>
 
-    <main class="container">
+    <main class="container mt-4">
         <div class="card">
             <div class="card-header bg-primary text-white text-center">
                 <strong>{% block content_title %}{% endblock %}</strong>
             </div>
-            <div class="card-body">{% block content_body %}{% endblock %}</div>
+            <div class="card-body pt-0">{% block content_body %}{% endblock %}</div>
         </div>
     </main>
 {% endblock %}

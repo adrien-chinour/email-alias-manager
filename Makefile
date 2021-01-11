@@ -1,6 +1,6 @@
 #!/usr/bin/make
 
-PHP_CONTAINER  = ellias_php
+PHP_CONTAINER  = php
 EXEC_PHP_FPM   = docker exec $(PHP_CONTAINER) sh -c
 SHELL = /bin/bash
 

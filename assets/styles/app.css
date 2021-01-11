@@ -3,3 +3,7 @@
 .atma {
     font-family: 'Atma', cursive;
 }
+
+html, body {
+    height: 100%;
+}

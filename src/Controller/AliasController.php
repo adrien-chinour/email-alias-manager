@@ -6,6 +6,7 @@ use App\Entity\Alias;
 use App\Form\AliasType;
 use App\Provider\AliasApiInterface;
 use App\Repository\AliasRepository;
+use App\Service\EmailAliasExporter;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Request;
@@ -43,7 +44,8 @@ final class AliasController extends AbstractController
 
         return $this->render('alias/index.html.twig', [
             'aliases' => $pagination,
-            'search' => $search
+            'search' => $search,
+            'exportFormat' => EmailAliasExporter::SUPPORTED_FORMAT,
         ]);
     }
 
@@ -61,7 +63,7 @@ final class AliasController extends AbstractController
 
             $this->repository->save($alias);
             $this->api->addAlias($alias->getRealEmail(), $alias->getAliasEmail());
-            $this->addFlash('success', $this->translator->trans('Alias added !'));
+            $this->addFlash('success', $this->translator->trans('Alias {alias} added', ['{alias}' => $alias->getAliasEmail()]));
 
             return $this->redirectToRoute('alias_index');
         }
@@ -74,8 +76,10 @@ final class AliasController extends AbstractController
      */
     public function delete(Request $request, Alias $alias): RedirectResponse
     {
+        $aliasEmail = $alias->getAliasEmail();
         if ($this->isCsrfTokenValid('delete' . $alias->getId(), $request->request->get('_token'))) {
             $this->api->deleteAlias($alias->getRealEmail(), $alias->getAliasEmail());
+            $this->addFlash('danger', $this->translator->trans('Alias {alias} has been deleted', ['alias' => $aliasEmail]));
             $this->repository->delete($alias);
         }
 

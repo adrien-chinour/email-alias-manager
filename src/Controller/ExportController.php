@@ -16,10 +16,10 @@ final class ExportController extends AbstractController
     /**
      * @Route("/", name="alias_export")
      */
-    public function exportCSV(Request $request, EmailAliasExporter $exporter): BinaryFileResponse
+    public function export(Request $request, EmailAliasExporter $exporter): BinaryFileResponse
     {
         $format = $request->query->get('format', 'csv');
 
-        return $this->file($exporter->get($format), "alias-export.$format");
+        return $this->file($exporter($format), "alias-export.$format");
     }
 }

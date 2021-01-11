@@ -12,29 +12,35 @@ use Symfony\Component\Serializer\Serializer;
 
 final class EmailAliasExporter
 {
+    const SUPPORTED_FORMAT = ['csv', 'json', 'xml'];
+
     private AliasRepository $repository;
+
+    private Serializer $serializer;
+
+    private Filesystem $filesystem;
 
     public function __construct(AliasRepository $repository)
     {
         $this->repository = $repository;
+        $this->serializer = new Serializer([new ObjectNormalizer()], [new XmlEncoder(), new JsonEncoder(), new CsvEncoder()]);
+        $this->filesystem = new Filesystem();
     }
 
-    public function get(string $format): string
+    public function __invoke(string $format): string
     {
-        $filesystem = new Filesystem();
-        $filename = $filesystem->tempnam(sys_get_temp_dir(), 'alias_export_', ".$format");
-        $filesystem->dumpFile($filename, $this->serialize($format));
+        $filename = $this->filesystem->tempnam(sys_get_temp_dir(), 'alias_export_', ".$format");
+        $this->filesystem->dumpFile($filename, $this->serialize($format));
 
         return $filename;
     }
 
     private function serialize(string $format): string
     {
-        if (!in_array($format, ['csv', 'json', 'xml'])) {
-            throw new \InvalidArgumentException(sprintf("'%s' is not a valid format. Authorized format are : [%s]", $format, implode(', ', ['csv', 'json', 'xml'])));
+        if (!in_array($format, self::SUPPORTED_FORMAT)) {
+            throw new \InvalidArgumentException(sprintf("'%s' is not a valid format. Authorized formats are : [%s]", $format, implode(', ', self::SUPPORTED_FORMAT)));
         }
-        $serializer = new Serializer([new ObjectNormalizer()], [new XmlEncoder(), new JsonEncoder(), new CsvEncoder()]);
 
-        return $serializer->serialize($this->repository->findAll(), $format);
+        return $this->serializer->serialize($this->repository->findAll(), $format);
     }
 }

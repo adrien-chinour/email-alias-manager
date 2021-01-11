@@ -21,9 +21,9 @@
 
             <form class="d-flex input-group input-group-sm w-auto" action="{{ path('alias_export') }}" method="get">
                 <select name="format" class="form-select">
-                    <option value="csv" selected>csv</option>
-                    <option value="json">json</option>
-                    <option value="xml">xml</option>
+                    {% for format in exportFormat %}
+                        <option value="{{ format }}">{{ format }}</option>
+                    {% endfor %}
                 </select>
                 <button class="btn btn-outline-primary" type="submit">Export</button>
             </form>
