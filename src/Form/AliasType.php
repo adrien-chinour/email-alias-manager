@@ -31,6 +31,7 @@ final class AliasType extends AbstractType
             ->add('realEmail', ChoiceType::class, [
                 'label' => $this->translator->trans('Target'),
                 'choices' => $this->api->getEmails(),
+                'attr' => ['class' => 'form-select'],
                 'choice_label' => function ($value) {
                     return $value;
                 },
@@ -51,7 +52,6 @@ final class AliasType extends AbstractType
     {
         $resolver->setDefaults([
             'data_class' => Alias::class,
-            'edition' => false,
             'attr' => ['id' => 'email-form'],
         ]);
     }

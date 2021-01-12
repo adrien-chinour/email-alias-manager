@@ -22,6 +22,7 @@ Encore
      */
     .addEntry('app', './assets/app.js')
     .addEntry('sync', './assets/js/sync.js')
+    .addEntry('alias-form', './assets/js/alias-form.js')
     .addStyleEntry('login', './assets/styles/login.css')
 
     // enables the Symfony UX Stimulus bridge (used in assets/bootstrap.js)
@@ -42,7 +43,7 @@ Encore
      * https://symfony.com/doc/current/frontend.html#adding-more-features
      */
     .cleanupOutputBeforeBuild()
-    .enableBuildNotifications()
+    .enableBuildNotifications(false)
     .enableSourceMaps(!Encore.isProduction())
     // enables hashed filenames (e.g. app.abc123.css)
     .enableVersioning(Encore.isProduction())
@@ -71,22 +72,6 @@ Encore
     })
 
     .copyFiles({from: './assets/favicon'})
-
-    // enables Sass/SCSS support
-    //.enableSassLoader()
-
-    // uncomment if you use TypeScript
-    //.enableTypeScriptLoader()
-
-    // uncomment if you use React
-    //.enableReactPreset()
-
-    // uncomment to get integrity="..." attributes on your script & link tags
-    // requires WebpackEncoreBundle 1.4 or higher
-    //.enableIntegrityHashes(Encore.isProduction())
-
-    // uncomment if you're having problems with a jQuery plugin
-    //.autoProvidejQuery()
 ;
 
 module.exports = Encore.getWebpackConfig();
