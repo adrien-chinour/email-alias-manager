@@ -2,12 +2,8 @@
 
 namespace App\Mercure;
 
-use Symfony\Contracts\Translation\TranslatorTrait;
-
 class Notification implements \JsonSerializable
 {
-    use TranslatorTrait;
-
     private string $type;
 
     private string $message;
@@ -15,7 +11,7 @@ class Notification implements \JsonSerializable
     public function __construct(string $type, string $message)
     {
         $this->type = $type;
-        $this->message = $this->trans($message);
+        $this->message = $message;
     }
 
     public function type(): string
@@ -30,6 +26,6 @@ class Notification implements \JsonSerializable
 
     public function jsonSerialize(): array
     {
-        return ['type' => $this->type, 'message' => $this->message];
+        return ['type' => $this->type(), 'message' => $this->message()];
     }
 }
