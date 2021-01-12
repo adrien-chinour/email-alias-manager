@@ -32,9 +32,7 @@ final class AliasType extends AbstractType
                 'label' => $this->translator->trans('Target'),
                 'choices' => $this->api->getEmails(),
                 'attr' => ['class' => 'form-select'],
-                'choice_label' => function ($value) {
-                    return $value;
-                },
+                'choice_label' => fn ($value) => $value,
             ])
             ->add('aliasEmail', TextType::class, [
                 'label' => $this->translator->trans('Alias'),

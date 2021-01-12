@@ -30,12 +30,8 @@ up: ## Start containers
 down: ## Stop containers
 	docker-compose down
 
-shell: ## Run bash on php container
+sh: ## Run shell on php container
 	docker exec -it $(PHP_CONTAINER) $(SHELL)
-sh:
-	docker exec -it $(PHP_CONTAINER) sh
-bash:
-	docker exec -it $(PHP_CONTAINER) bash
 
 ## ----- Composer -----
 

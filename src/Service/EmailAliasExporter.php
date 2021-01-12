@@ -7,12 +7,13 @@ use Symfony\Component\Filesystem\Filesystem;
 use Symfony\Component\Serializer\Encoder\CsvEncoder;
 use Symfony\Component\Serializer\Encoder\JsonEncoder;
 use Symfony\Component\Serializer\Encoder\XmlEncoder;
+use Symfony\Component\Serializer\Encoder\YamlEncoder;
 use Symfony\Component\Serializer\Normalizer\ObjectNormalizer;
 use Symfony\Component\Serializer\Serializer;
 
 final class EmailAliasExporter
 {
-    const SUPPORTED_FORMAT = ['csv', 'json', 'xml'];
+    const SUPPORTED_FORMAT = ['csv', 'json', 'xml', 'yaml'];
 
     private AliasRepository $repository;
 
@@ -23,7 +24,7 @@ final class EmailAliasExporter
     public function __construct(AliasRepository $repository)
     {
         $this->repository = $repository;
-        $this->serializer = new Serializer([new ObjectNormalizer()], [new XmlEncoder(), new JsonEncoder(), new CsvEncoder()]);
+        $this->serializer = new Serializer([new ObjectNormalizer()], [new XmlEncoder(), new JsonEncoder(), new CsvEncoder(), new YamlEncoder()]);
         $this->filesystem = new Filesystem();
     }
 

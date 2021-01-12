@@ -66,4 +66,12 @@
             <div class="card-body pt-0">{% block content_body %}{% endblock %}</div>
         </div>
     </main>
+
+    <footer class="container mt-2 text-light text-center">
+        <p class="m-0 small">
+            <strong>{{ aliasCounter }}</strong> alias existants | {# TODO translate #}
+            Made by <a target="_blank" class="text-light text-decoration-underline"
+                       href="https://adrienchinour.me">Adrien Chinour</a>
+        </p>
+    </footer>
 {% endblock %}

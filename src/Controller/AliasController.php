@@ -4,8 +4,8 @@ namespace App\Controller;
 
 use App\Entity\Alias;
 use App\Form\AliasType;
-use App\Provider\AliasApiInterface;
 use App\Repository\AliasRepository;
+use App\Service\AliasService;
 use App\Service\EmailAliasExporter;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\RedirectResponse;
@@ -19,27 +19,24 @@ use Symfony\Contracts\Translation\TranslatorInterface;
  */
 final class AliasController extends AbstractController
 {
-    private AliasApiInterface $api;
-
-    private AliasRepository $repository;
-
     private TranslatorInterface $translator;
 
-    public function __construct(AliasApiInterface $api, AliasRepository $repository, TranslatorInterface $translator)
+    private AliasService $aliasService;
+
+    public function __construct(TranslatorInterface $translator, AliasService $aliasService)
     {
-        $this->api = $api;
-        $this->repository = $repository;
         $this->translator = $translator;
+        $this->aliasService = $aliasService;
     }
 
     /**
      * @Route("/", name="alias_index", methods={"GET"})
      */
-    public function index(Request $request): Response
+    public function index(Request $request, AliasRepository $repository): Response
     {
         $search = $request->query->get('search');
 
-        $pagination = $this->repository->paginate($request->query->getInt('page', 1), $search);
+        $pagination = $repository->paginate($request->query->getInt('page', 1), $search);
         $pagination->setCustomParameters(['align' => 'center']);
 
         return $this->render('alias/index.html.twig', [
@@ -58,11 +55,8 @@ final class AliasController extends AbstractController
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {
-            /** @var Alias $alias */
             $alias = $form->getData();
-
-            $this->repository->save($alias);
-            $this->api->addAlias($alias->getRealEmail(), $alias->getAliasEmail());
+            $this->aliasService->add($alias);
             $this->addFlash('success', $this->translator->trans('Alias {alias} added', ['{alias}' => $alias->getAliasEmail()]));
 
             return $this->redirectToRoute('alias_index');
@@ -76,11 +70,10 @@ final class AliasController extends AbstractController
      */
     public function delete(Request $request, Alias $alias): RedirectResponse
     {
-        $aliasEmail = $alias->getAliasEmail();
+        $email = $alias->getAliasEmail();
         if ($this->isCsrfTokenValid('delete' . $alias->getId(), $request->request->get('_token'))) {
-            $this->api->deleteAlias($alias->getRealEmail(), $alias->getAliasEmail());
-            $this->addFlash('danger', $this->translator->trans('Alias {alias} has been deleted', ['alias' => $aliasEmail]));
-            $this->repository->delete($alias);
+            $this->aliasService->delete($alias);
+            $this->addFlash('danger', $this->translator->trans('Alias {alias} has been deleted', ['alias' => $email]));
         }
 
         return $this->redirectToRoute('alias_index');
