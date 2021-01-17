@@ -40,7 +40,4 @@ services:
         environment:
             RABBITMQ_DEFAULT_USER: rabbit
             RABBITMQ_DEFAULT_PASS: rabbit
-    redis:
-        container_name: redis
-        image: redis:6-alpine
 
