@@ -1,10 +1,14 @@
 name: quality
-on: [push, pull_request]
+on: [ push, pull_request ]
 
 jobs:
-    build:
-        name: Build
-        runs-on: ubuntu-latest
+    quality:
+        runs-on: ${{ matrix.operating-system }}
+        strategy:
+            matrix:
+                operating-system: [ ubuntu-latest, windows-latest, macOS-latest ]
+                php-versions: [ '7.4' ]
+        name: PHP ${{ matrix.php-versions }} Test on ${{ matrix.operating-system }}
         steps:
             -   uses: actions/checkout@v2
 
