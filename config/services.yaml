@@ -28,7 +28,8 @@ services:
         tags: [ 'controller.service_arguments' ]
 
     # Define used provider
-    App\Provider\AliasApiInterface: '@App\Provider\Gandi\GandiAliasApi'
+    App\Provider\AliasApiInterface:
+        factory: '@App\Provider\ProviderFactory'
 
     # Logger decorator for api call
     App\Provider\AliasApiLoggerDecorator:
