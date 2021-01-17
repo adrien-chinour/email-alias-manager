@@ -4,7 +4,6 @@ namespace App\Provider\Fake\Models;
 
 class Alias
 {
-
     public function __construct(string $email, string $alias)
     {
         $this->email = $email;

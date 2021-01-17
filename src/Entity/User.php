@@ -10,7 +10,6 @@ use Symfony\Component\Security\Core\User\UserInterface;
  */
 class User implements UserInterface
 {
-
     /**
      * @ORM\Id()
      * @ORM\GeneratedValue()
@@ -58,7 +57,7 @@ class User implements UserInterface
      */
     public function getUsername(): string
     {
-        return (string)$this->uuid;
+        return (string) $this->uuid;
     }
 
     /**
@@ -85,7 +84,7 @@ class User implements UserInterface
      */
     public function getPassword(): string
     {
-        return (string)$this->password;
+        return (string) $this->password;
     }
 
     public function setPassword(string $password): self

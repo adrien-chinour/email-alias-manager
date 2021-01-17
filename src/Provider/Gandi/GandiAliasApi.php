@@ -2,19 +2,20 @@
 
 namespace App\Provider\Gandi;
 
-use App\Exception\ApiCallException;
-use App\Service\AliasApiInterface;
-use App\Service\EmailTools;
+use App\Provider\Exception\ApiCallException;
+use App\Provider\AliasApiInterface;
+use App\Provider\EmailUtils;
 use DateInterval;
 use InvalidArgumentException;
 use Psr\Log\LoggerInterface;
 use Symfony\Component\Cache\Adapter\FilesystemAdapter;
 use Symfony\Component\HttpKernel\Exception\HttpException;
 use Symfony\Contracts\HttpClient\HttpClientInterface;
-use Throwable;
 
 class GandiAliasApi implements AliasApiInterface
 {
+    use EmailUtils;
+
     private const ENV_API_KEY = 'GANDI_API_KEY';
 
     private const BASE_URL = 'https://api.gandi.net/v5';
@@ -30,9 +31,7 @@ class GandiAliasApi implements AliasApiInterface
     public function __construct(LoggerInterface $logger, HttpClientInterface $httpClient)
     {
         if (!isset($_ENV[self::ENV_API_KEY])) {
-            throw new InvalidArgumentException(
-                sprintf("You must provide an api key in your env variables with %s", self::ENV_API_KEY)
-            );
+            throw new InvalidArgumentException(sprintf('You must provide an api key in your env variables with %s', self::ENV_API_KEY));
         }
 
         $this->apiKey = $_ENV[self::ENV_API_KEY];
@@ -42,18 +41,14 @@ class GandiAliasApi implements AliasApiInterface
     }
 
     /**
-     * @param string $method
-     * @param string $url
-     * @param array $options
-     * @return array
      * @throws ApiCallException
      */
     private function request(string $method, string $url, array $options = []): array
     {
         $options = array_merge_recursive($options, [
             'headers' => [
-                'Authorization' => 'ApiKey ' . $this->apiKey
-            ]
+                'Authorization' => 'ApiKey '.$this->apiKey,
+            ],
         ]);
 
         try {
@@ -62,11 +57,8 @@ class GandiAliasApi implements AliasApiInterface
                 throw new HttpException($response->getStatusCode(), $response->getContent());
             }
             $content = json_decode($response->getContent(), true);
-        } catch (Throwable $exception) {
-            throw new ApiCallException(
-                "Gandi",
-                sprintf("%s : %s with options: %s", $method, $url, json_encode($options)),
-                $exception->getMessage());
+        } catch (\Throwable $exception) {
+            throw new ApiCallException('Gandi', sprintf('%s : %s with options: %s', $method, $url, json_encode($options)), $exception->getMessage());
         }
 
         return $content;
@@ -74,10 +66,11 @@ class GandiAliasApi implements AliasApiInterface
 
     /**
      * @return array
+     *
      * @throws ApiCallException
      * @throws \Psr\Cache\InvalidArgumentException
      */
-    private function getDomains()
+    private function getDomains(): array
     {
         $item = $this->cache->getItem('domains');
         if ($item->isHit()) {
@@ -98,8 +91,6 @@ class GandiAliasApi implements AliasApiInterface
     }
 
     /**
-     * @param string $domain
-     * @return array
      * @throws ApiCallException
      * @throws \Psr\Cache\InvalidArgumentException
      */
@@ -110,7 +101,7 @@ class GandiAliasApi implements AliasApiInterface
             return $item->get();
         }
 
-        $mailboxes = $this->request('GET', sprintf("%s/email/mailboxes/%s", self::BASE_URL, $domain));
+        $mailboxes = $this->request('GET', sprintf('%s/email/mailboxes/%s', self::BASE_URL, $domain));
 
         // Set domain mailboxes in cache
         $item->set($mailboxes);
@@ -121,26 +112,23 @@ class GandiAliasApi implements AliasApiInterface
     }
 
     /**
-     * @param array $aliases
-     * @param array $mailbox
      * @throws ApiCallException
      */
     private function updateMailboxAlias(array $aliases, array $mailbox): void
     {
         $this->request(
             'PATCH',
-            sprintf("%s/email/mailboxes/%s/%s", self::BASE_URL, $mailbox['domain'], $mailbox['id']),
+            sprintf('%s/email/mailboxes/%s/%s', self::BASE_URL, $mailbox['domain'], $mailbox['id']),
             [
                 'headers' => [
                     'Content-Type' => 'application/json',
                 ],
-                'body' => json_encode(["aliases" => $aliases])
+                'body' => json_encode(['aliases' => $aliases]),
             ]
         );
     }
 
     /**
-     * @return array
      * @throws ApiCallException
      * @throws \Psr\Cache\InvalidArgumentException
      */
@@ -157,25 +145,22 @@ class GandiAliasApi implements AliasApiInterface
     }
 
     /**
-     * @param string $email
-     * @return array|null
      * @throws ApiCallException
      * @throws \Psr\Cache\InvalidArgumentException
      */
     private function getMailboxDetails(string $email): ?array
     {
-        $item = $this->cache->getItem(sprintf("mailbox.%s", md5($email)));
+        $item = $this->cache->getItem(sprintf('mailbox.%s', md5($email)));
         if ($item->isHit()) {
             return $item->get();
         }
 
-        $domain = EmailTools::getDomain($email);
+        $domain = $this->getDomain($email);
         foreach ($this->getMailboxes($domain) as $mailbox) {
             if ($mailbox['address'] === $email) {
-
                 $mailbox = $this->request(
                     'GET',
-                    sprintf("%s/email/mailboxes/%s/%s", self::BASE_URL, $domain, $mailbox['id'])
+                    sprintf('%s/email/mailboxes/%s/%s', self::BASE_URL, $domain, $mailbox['id'])
                 );
 
                 // Set email mailbox in cache
@@ -187,12 +172,10 @@ class GandiAliasApi implements AliasApiInterface
             }
         }
 
-        return NULL;
+        return null;
     }
 
     /**
-     * @param string $email
-     * @return array
      * @throws ApiCallException
      * @throws \Psr\Cache\InvalidArgumentException
      */
@@ -202,27 +185,24 @@ class GandiAliasApi implements AliasApiInterface
 
         $aliases = [];
         foreach ($mailbox['aliases'] as $alias) {
-            $aliases[] = $alias . '@' . EmailTools::getDomain($email);
+            $aliases[] = $alias.'@'.$this->getDomain($email);
         }
 
         return $aliases;
     }
 
     /**
-     * @param string $email
-     * @param string $alias
-     * @return bool
      * @throws ApiCallException
      * @throws \Psr\Cache\InvalidArgumentException
      */
     public function addAlias(string $email, string $alias): bool
     {
         $mailbox = $this->getMailboxDetails($email);
-        $this->cache->delete(sprintf("mailbox.%s", md5($email)));
+        $this->cache->delete(sprintf('mailbox.%s', md5($email)));
         $aliases = $mailbox['aliases'];
 
-        if (!array_search(EmailTools::withoutDomain($alias), $aliases)) {
-            $aliases[] = EmailTools::withoutDomain($alias);
+        if (!array_search($this->withoutDomain($alias), $aliases)) {
+            $aliases[] = $this->withoutDomain($alias);
             $this->updateMailboxAlias(array_values($aliases), $mailbox);
         }
 
@@ -230,19 +210,16 @@ class GandiAliasApi implements AliasApiInterface
     }
 
     /**
-     * @param string $email
-     * @param string $alias
-     * @return bool
      * @throws ApiCallException
      * @throws \Psr\Cache\InvalidArgumentException
      */
     public function deleteAlias(string $email, string $alias): bool
     {
         $mailbox = $this->getMailboxDetails($email);
-        $this->cache->delete(sprintf("mailbox.%s", md5($email)));
+        $this->cache->delete(sprintf('mailbox.%s', md5($email)));
         $aliases = $mailbox['aliases'];
 
-        if (($key = array_search(EmailTools::withoutDomain($alias), $aliases)) !== false) {
+        if (($key = array_search($this->withoutDomain($alias), $aliases)) !== false) {
             unset($aliases[$key]);
             $this->updateMailboxAlias(array_values($aliases), $mailbox);
         }

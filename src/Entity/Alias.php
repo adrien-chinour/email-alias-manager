@@ -9,7 +9,6 @@ use Doctrine\ORM\Mapping as ORM;
  */
 class Alias
 {
-
     /**
      * @ORM\Id()
      * @ORM\GeneratedValue()
@@ -27,11 +26,6 @@ class Alias
      */
     private ?string $aliasEmail = null;
 
-    /**
-     * @ORM\Column(type="array")
-     */
-    private array $tags = [];
-
     public function getId(): ?int
     {
         return $this->id;
@@ -45,6 +39,7 @@ class Alias
     public function setRealEmail(string $realEmail): self
     {
         $this->realEmail = $realEmail;
+
         return $this;
     }
 
@@ -56,17 +51,6 @@ class Alias
     public function setAliasEmail(string $aliasEmail): self
     {
         $this->aliasEmail = $aliasEmail;
-        return $this;
-    }
-
-    public function getTags(): ?array
-    {
-        return $this->tags;
-    }
-
-    public function setTags(array $tags): self
-    {
-        $this->tags = $tags;
 
         return $this;
     }
@@ -79,10 +63,7 @@ class Alias
     public function getDomain(): string
     {
         $email = explode('@', $this->realEmail);
-        if (count($email) < 2) {
-            return "";
-        }
 
-        return "@$email[1]";
+        return count($email) < 2 ? '' : "@$email[1]";
     }
 }

@@ -1,0 +1,43 @@
+{% extends 'dashboard.html.twig' %}
+
+{% block content_title %}{{ 'Alias to sync' | trans }}{% endblock %}
+
+{% block content_body %}
+    <nav class="navbar navbar-light bg-light">
+        <div class="container-fluid justify-content-end">
+            <button id="btn-change" class="btn btn-sm btn-dark" data-url="{{ path('sync_change') }}">
+                {{ "Refresh" | trans }}
+            </button>
+            <button id="btn-syncing" class="btn btn-sm btn-primary ms-3" data-url="{{ path('sync_syncing') }}">
+                {{ "Synchronize" | trans }}
+            </button>
+        </div>
+    </nav>
+
+    <div class="table-responsive">
+        <table class="table table-hover text-center">
+            <thead class="thead-dark">
+            <tr>
+                <th>{{ 'Email' | trans }}</th>
+                <th>{{ 'Alias' | trans }}</th>
+                <th>{{ 'Existing on' | trans }}</th>
+            </tr>
+            </thead>
+
+            <tbody>
+            {% for item in diff %}
+                <tr class={{ item.existOn == 'local' ? "table-success" : "table-warning" }}>
+                    <td>{{ item.email }}</td>
+                    <td>{{ item.alias }}</td>
+                    <td>{{ item.existOn }}</td>
+                </tr>
+            {% endfor %}
+            </tbody>
+        </table>
+    </div>
+{% endblock %}
+
+{% block javascripts %}
+    {{ parent() }}
+    {{ encore_entry_script_tags('sync') }}
+{% endblock %}

@@ -3,7 +3,7 @@
 namespace App\Form;
 
 use App\Entity\Alias;
-use App\Service\AliasApiInterface;
+use App\Provider\AliasApiInterface;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\Extension\Core\Type\ChoiceType;
 use Symfony\Component\Form\Extension\Core\Type\TextType;
@@ -15,7 +15,6 @@ use Symfony\Contracts\Translation\TranslatorInterface;
 
 final class AliasType extends AbstractType
 {
-
     private AliasApiInterface $api;
 
     private TranslatorInterface $translator;
@@ -28,44 +27,30 @@ final class AliasType extends AbstractType
 
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
-        if (!$options['edition']) {
-            $builder
-                ->add('realEmail', ChoiceType::class, [
-                    'label' => $this->translator->trans("Target"),
-                    'choices' => $this->api->getEmails(),
-                    'choice_label' => function ($value) {
-                        return $value;
-                    },
-                ])
-                ->add('aliasEmail', TextType::class, [
-                    'label' => $this->translator->trans("Alias"),
-                ])
-                ->addEventListener(FormEvents::SUBMIT, function (FormEvent $event) {
-                    /** @var Alias $alias */
-                    $alias = $event->getData();
-
-                    // update alias because domain not include in form
-                    $alias->setAliasEmail($alias->getAliasEmail() . $alias->getDomain());
-                });
-        }
-
         $builder
-            ->add('tags', ChoiceType::class, [
-                'multiple' => true,
-                'expanded' => false,
-                'required' => false,
-                'attr' => ['class' => 'select2'],
-            ]);
+            ->add('realEmail', ChoiceType::class, [
+                'label' => $this->translator->trans('Target'),
+                'choices' => $this->api->getEmails(),
+                'attr' => ['class' => 'form-select'],
+                'choice_label' => fn ($value) => $value,
+            ])
+            ->add('aliasEmail', TextType::class, [
+                'label' => $this->translator->trans('Alias'),
+            ])
+            ->addEventListener(FormEvents::SUBMIT, function (FormEvent $event) {
+                /** @var Alias $alias */
+                $alias = $event->getData();
 
-        $builder->get('tags')->resetViewTransformers();
+                // update alias because domain not include in form
+                $alias->setAliasEmail($alias->getAliasEmail() . $alias->getDomain());
+            });
     }
 
     public function configureOptions(OptionsResolver $resolver)
     {
         $resolver->setDefaults([
             'data_class' => Alias::class,
-            'edition' => false,
-            'attr' => ['id' => 'email-form']
+            'attr' => ['id' => 'email-form'],
         ]);
     }
 }

@@ -4,11 +4,10 @@ namespace App\DataPersister;
 
 use ApiPlatform\Core\DataPersister\ContextAwareDataPersisterInterface;
 use App\Entity\Alias;
-use App\Service\AliasApiInterface;
+use App\Provider\AliasApiInterface;
 
 final class AliasDataPersister implements ContextAwareDataPersisterInterface
 {
-
     private ContextAwareDataPersisterInterface $decorated;
 
     private AliasApiInterface $api;
@@ -20,7 +19,7 @@ final class AliasDataPersister implements ContextAwareDataPersisterInterface
     }
 
     /**
-     * @inheritDoc
+     * {@inheritDoc}
      */
     public function supports($data, array $context = []): bool
     {
@@ -29,7 +28,6 @@ final class AliasDataPersister implements ContextAwareDataPersisterInterface
 
     /**
      * @param Alias $data
-     * @param array $context
      *
      * @return object|void
      */
@@ -46,7 +44,6 @@ final class AliasDataPersister implements ContextAwareDataPersisterInterface
 
     /**
      * @param Alias $data
-     * @param array $context
      *
      * @return object|null
      */

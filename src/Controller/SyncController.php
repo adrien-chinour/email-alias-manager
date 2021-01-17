@@ -2,12 +2,15 @@
 
 namespace App\Controller;
 
-use App\Entity\Alias;
-use App\Repository\AliasRepository;
-use App\Service\AliasApiInterface;
+use App\Mercure\MercureNotifier;
+use App\Mercure\Notification;
+use App\Messenger\Message\AliasChangeMessage;
+use App\Messenger\Message\AliasSyncingMessage;
+use App\Repository\AliasDiffRepository;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
-use Symfony\Component\HttpFoundation\RedirectResponse;
-use Symfony\Component\HttpFoundation\Request;
+use Symfony\Component\HttpFoundation\Response;
+use Symfony\Component\Messenger\MessageBusInterface;
+use Symfony\Component\Messenger\Stamp\DelayStamp;
 use Symfony\Component\Routing\Annotation\Route;
 
 /**
@@ -15,88 +18,40 @@ use Symfony\Component\Routing\Annotation\Route;
  */
 final class SyncController extends AbstractController
 {
+    private AliasDiffRepository $repository;
 
-    private AliasApiInterface $api;
-
-    private AliasRepository $repository;
-
-    public function __construct(AliasApiInterface $api, AliasRepository $repository)
+    public function __construct(AliasDiffRepository $repository)
     {
-        $this->api = $api;
         $this->repository = $repository;
     }
 
     /**
      * @Route("/", name="sync_index")
      */
-    public function index()
+    public function index(): Response
     {
-        return $this->redirectToRoute('sync_diff');
+        return $this->render('sync/index.html.twig', ['diff' => $this->repository->findAll()]);
     }
 
     /**
-     * @Route("/diff", name="sync_diff")
+     * @Route("/change", name="sync_change")
      */
-    public function diff()
+    public function change(MessageBusInterface $bus, MercureNotifier $notifier): Response
     {
-        $diff = [];
-        foreach ($this->api->getEmails() as $email) {
-            $local = $this->repository->getAlias($email);
-            $distant = $this->api->getAlias($email);
+        $notifier->send(new Notification('warning', 'Send your message to worker'));
+        $bus->dispatch(new AliasChangeMessage(), [new DelayStamp(5000),]);
 
-            $local = array_map(function (Alias $alias) {
-                return $alias->getAliasEmail();
-            }, $local);
-
-            foreach (array_diff($distant, $local) as $alias) {
-                $diff[] = [
-                    'email' => $email,
-                    'alias' => $alias,
-                    'exist' => 'distant',
-                ];
-            }
-
-            foreach (array_diff($local, $distant) as $alias) {
-                $diff[] = [
-                    'email' => $email,
-                    'alias' => $alias,
-                    'exist' => 'local',
-                ];
-            }
-        }
-
-        return $this->render('sync/diff.html.twig', ['diff' => $diff]);
+        return new Response("ok");
     }
 
     /**
-     * @Route("/add", name="sync_add", methods={"POST"})
-     * @param Request $request
-     *
-     * @return RedirectResponse
+     * @Route("/syncing", name="sync_syncing")
      */
-    public function add(Request $request)
+    public function sync(MessageBusInterface $bus, MercureNotifier $notifier): Response
     {
-        $aliases = $request->request->get('alias');
-        $emails = $request->request->get('email');
-        $exists = $request->request->get('exist');
+        $notifier->send(new Notification('warning', 'Send your message to worker'));
+        $bus->dispatch(new AliasSyncingMessage());
 
-        if (empty($aliases)) {
-            $this->addFlash('warning', 'Aucun alias à synchroniser');
-            return $this->redirectToRoute('sync_diff');
-        }
-
-        foreach ($aliases as $key => $alias) {
-            if ($exists[$key] === 'local') {
-                $this->api->addAlias($emails[$key], $alias);
-            } else {
-                $email = (new Alias())
-                    ->setRealEmail($emails[$key])
-                    ->setAliasEmail($alias);
-                $this->repository->save($email);
-            }
-        }
-
-        $this->addFlash('success', 'Synchronisation terminée');
-        return $this->redirectToRoute('sync_diff');
+        return new Response("ok");
     }
 }

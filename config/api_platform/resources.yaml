@@ -4,17 +4,8 @@ resources:
             get: ~
             post: ~
         itemOperations:
+            get: ~
             delete: ~
             patch:
                 denormalization_context:
                     groups: ['update']
-
-    App\Dto\Email:
-        collectionOperations:
-            get:
-                method: GET
-                path: /email
-                controller: App\Controller\EmailApiController
-                openapi_context:
-                    summary: Get all available emails for aliases
-        itemOperations: []

@@ -3,13 +3,22 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+
+    <link rel="apple-touch-icon" sizes="180x180" href="{{ asset('build/apple-touch-icon.png') }}">
+    <link rel="icon" type="image/png" sizes="32x32" href="{{ asset('build/favicon-32x32.png') }}">
+    <link rel="icon" type="image/png" sizes="16x16" href="{{ asset('build/favicon-16x16.png') }}">
+    <link rel="manifest" href="{{ asset('build/site.webmanifest') }}">
+    <link rel="mask-icon" color="#5bbad5" href="{{ asset('build/safari-pinned-tab.svg') }}">
+    <meta name="msapplication-TileColor" content="#2b5797">
+    <meta name="theme-color" content="#ffffff">
+
     <title>{% block title %}{{ 'site.title' | trans }}{% endblock %}</title>
 
     <link href="https://fonts.googleapis.com/css2?family=Atma:wght@700&display=swap" rel="stylesheet">
     {{ encore_entry_link_tags('app') }}
     {% block stylesheets %}{% endblock %}
 </head>
-<body>
+<body class="bg-dark">
 {% block body %}{% endblock %}
 
 {{ encore_entry_script_tags('app') }}

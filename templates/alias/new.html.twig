@@ -1,38 +1,31 @@
 {% extends 'dashboard.html.twig' %}
 
-{% block stylesheets %}
-    {{ parent() }}
-    {{ encore_entry_link_tags('add-alias') }}
-{% endblock %}
-
 {% block content_title %}{{ "Add new alias" | trans }}{% endblock %}
 
 {% block content_body %}
-    {{ form_start(form) }}
-    {{ form_row(form.realEmail) }}
+    <div class="mt-2">
+        {{ form_start(form) }}
 
-    <div class="form-group">
-        {{ form_label(form.aliasEmail) }}
-        <div class="input-group">
+        {{ form_widget(form.realEmail) }}
+
+        <div class="input-group mt-3">
             {{ form_widget(form.aliasEmail) }}
-            <div class="input-group-append">
-                <span class="input-group-text" id="input-append-alias"></span>
+            <span class="input-group-text" id="input-append-alias">@example.com</span>
+        </div>
+
+        <div class="row mt-3">
+            <div class="col-sm-6">
+                <a class="btn btn-block btn-dark" href="{{ path('alias_index') }}">{{ "Cancel" | trans }}</a>
+            </div>
+            <div class="col-sm-6">
+                <button class="btn btn-block btn-success">{{ "Save" | trans }}</button>
             </div>
         </div>
+        {{ form_end(form) }}
     </div>
-    {{ form_row(form.tags) }}
-    <div class="row">
-        <div class="col-sm-6">
-            <a class="btn btn-block btn-secondary" href="{{ path('alias_index') }}">{{ "Cancel" | trans }}</a>
-        </div>
-        <div class="col-sm-6">
-            <button class="btn btn-block btn-success">{{ "Save" | trans }}</button>
-        </div>
-    </div>
-    {{ form_end(form) }}
 {% endblock %}
 
 {% block javascripts %}
     {{ parent() }}
-    {{ encore_entry_script_tags('add-alias') }}
+    {{ encore_entry_script_tags('alias-form') }}
 {% endblock %}
