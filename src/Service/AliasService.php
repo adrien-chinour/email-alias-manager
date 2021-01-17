@@ -37,7 +37,6 @@ class AliasService
     public function countAliases(): ?int
     {
         if (null === $this->counter) {
-            dump("init");
             $this->counter = $this->repository->count([]);
         }
 

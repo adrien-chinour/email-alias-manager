@@ -41,7 +41,8 @@ final class EmailAliasExporter
         if (!in_array($format, self::SUPPORTED_FORMAT)) {
             throw new \InvalidArgumentException(sprintf("'%s' is not a valid format. Authorized formats are : [%s]", $format, implode(', ', self::SUPPORTED_FORMAT)));
         }
+        $context = 'yaml' === $format ? ['yaml_inline' => 2, 'yaml_indent' => 2] : [];
 
-        return $this->serializer->serialize($this->repository->findAll(), $format);
+        return $this->serializer->serialize($this->repository->findAll(), $format, $context);
     }
 }
