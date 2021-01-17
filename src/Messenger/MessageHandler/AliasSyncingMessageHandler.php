@@ -38,5 +38,4 @@ class AliasSyncingMessageHandler implements MessageHandlerInterface
             $this->aliasRepository->save($diff->toAlias());
         }
     }
-
 }

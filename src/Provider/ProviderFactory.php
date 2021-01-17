@@ -35,5 +35,4 @@ class ProviderFactory
                 return new FakeAliasApi();
         }
     }
-
 }

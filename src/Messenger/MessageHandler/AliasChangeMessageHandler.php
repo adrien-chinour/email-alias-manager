@@ -29,7 +29,6 @@ class AliasChangeMessageHandler implements MessageHandlerInterface
     {
         $this->diffRepository->reset();
         foreach ($this->api->getEmails() as $email) {
-
             $local = array_map(function (Alias $alias) {
                 return $alias->getAliasEmail();
             }, $this->aliasRepository->getAlias($email));
