@@ -33,7 +33,6 @@ security:
                 success_handler: lexik_jwt_authentication.handler.authentication_success
                 failure_handler: lexik_jwt_authentication.handler.authentication_failure
 
-
     # first match is always be used
     access_control:
         - { path: ^/authentication_token, roles: IS_AUTHENTICATED_ANONYMOUSLY }
