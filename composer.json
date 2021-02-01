@@ -17,6 +17,7 @@
     "ext-zip": "*",
     "api-platform/api-pack": "^1.2",
     "knplabs/knp-paginator-bundle": "^5.2",
+    "lcobucci/jwt": "^4.1",
     "lexik/jwt-authentication-bundle": "^2.8",
     "ovh/ovh": "^2.0",
     "sensio/framework-extra-bundle": "^5.6",

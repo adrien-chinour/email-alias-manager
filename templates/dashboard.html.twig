@@ -33,7 +33,7 @@
     </nav>
 
     {# Flash message with toast components (stackable) #}
-    <div aria-live="polite" aria-atomic="true" class="fixed-bottom" data-controller="mercure">
+    <div aria-live="polite" aria-atomic="true" class="fixed-bottom" data-controller="mercure" data-hub-url="{{ mercure_hub }}">
         <div id="toast-container" class="toast-container position-absolute bottom-0 start-0 p-3" style="z-index: 999">
 
             {# prototype to create a new toast from JS #}
@@ -69,7 +69,7 @@
 
     <footer class="container mt-2 text-light text-center">
         <p class="m-0 small">
-            <strong>{{ aliasCounter }}</strong> alias existants | {# TODO translate #}
+            <strong>{{ alias_counter }}</strong> {{ "existing aliases" | t }} |
             Made by <a target="_blank" class="text-light text-decoration-underline"
                        href="https://adrienchinour.me">Adrien Chinour</a>
         </p>

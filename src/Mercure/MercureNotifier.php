@@ -8,9 +8,9 @@ use Symfony\Contracts\Translation\TranslatorInterface;
 
 class MercureNotifier
 {
-    private PublisherInterface $publisher;
+    protected PublisherInterface $publisher;
 
-    private TranslatorInterface $translator;
+    protected TranslatorInterface $translator;
 
     public function __construct(PublisherInterface $publisher, TranslatorInterface $translator)
     {
