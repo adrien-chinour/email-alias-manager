@@ -5,4 +5,5 @@ twig:
     form_themes: [ 'bootstrap_4_layout.html.twig' ]
 
     globals:
-        aliasCounter: '@App\Twig\AliasCounterVariable'
+        alias_counter: '@App\Twig\AliasCounterVariable'
+        mercure_hub: '%env(MERCURE_SUBSCRIBE_URL)%'

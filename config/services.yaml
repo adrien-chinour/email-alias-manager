@@ -37,3 +37,7 @@ services:
 
     App\DataPersister\AliasDataPersister:
         decorates: 'api_platform.doctrine.orm.data_persister'
+
+    App\Mercure\MercureJwtProvider:
+        arguments:
+            $mercureSecretKey: '%env(MERCURE_SECRET_KEY)%'
